@@ -38,6 +38,7 @@ body {
   background: linear-gradient(90deg, #00f5ff, #ff00ff, #00f5ff);
   background-size: 200% auto;
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shine 3s linear infinite;
 }
@@ -336,9 +337,7 @@ body {
 }
 
 .book-slot.empty::after {
-  content: 'Добавить книгу';
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 0.9rem;
+  content: '';
 }
 
 .book-on-shelf {
@@ -383,31 +382,42 @@ body {
 
 .book-info {
   position: absolute;
-  bottom: -60px;
+  bottom: -70px;
   left: 5px;
   right: 5px;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(10px);
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(0, 245, 255, 0.5);
   opacity: 0;
   transform: translateY(10px);
   transition: all 0.3s;
   pointer-events: none;
-  max-height: 150px;
+  max-height: 180px;
   overflow-y: auto;
   font-size: 0.85rem;
-  line-height: 1.4;
+  line-height: 1.5;
+  color: #fff;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.8);
 }
 
 .book-info::-webkit-scrollbar {
-  width: 4px;
+  width: 6px;
+}
+
+.book-info::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
 }
 
 .book-info::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
+  background: rgba(0, 245, 255, 0.6);
+  border-radius: 3px;
+}
+
+.book-info::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 245, 255, 0.9);
 }
 
 .book-on-shelf:hover .book-info {
@@ -437,12 +447,13 @@ body {
 }
 
 .star {
-  color: #ffc107;
-  text-shadow: 0 0 5px rgba(255, 193, 7, 0.5);
+  color: #ffd700;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.8),
+               0 0 15px rgba(255, 215, 0, 0.4);
 }
 
 .star.empty {
-  color: rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.2);
   text-shadow: none;
 }
 

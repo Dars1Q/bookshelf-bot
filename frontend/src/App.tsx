@@ -409,11 +409,15 @@ function App() {
                   {shelfIndex === shelves.length - 1 && emptySlotsCount > 0 && (
                     <>
                       {Array.from({ length: emptySlotsCount }).map((_, idx) => (
-                        <div 
-                          key={idx} 
+                        <div
+                          key={idx}
                           className="book-slot empty"
                           onClick={() => setShowForm(true)}
-                        ></div>
+                        >
+                          <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.9rem', marginTop: '10px' }}>
+                            {t.shelf.emptySlot}
+                          </span>
+                        </div>
                       ))}
                     </>
                   )}
