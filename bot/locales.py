@@ -141,6 +141,31 @@ LOCALES = {
     }
 }
 
+# Тексты для команды /lang
+LANG_TEXTS = {
+    'ru': {
+        'title': '🌐 Выберите язык / Select language:',
+        'button_ru': '🇷🇺 Русский',
+        'button_en': '🇬🇧 English',
+        'button_uk': '🇺🇦 Українська',
+        'selected': '✅ Язык изменён на {}'
+    },
+    'en': {
+        'title': '🌐 Выберите язык / Select language:',
+        'button_ru': '🇷🇺 Русский',
+        'button_en': '🇬🇧 English',
+        'button_uk': '🇺🇦 Українська',
+        'selected': '✅ Language changed to {}'
+    },
+    'uk': {
+        'title': '🌐 Выберите язык / Select language:',
+        'button_ru': '🇷🇺 Русский',
+        'button_en': '🇬🇧 English',
+        'button_uk': '🇺🇦 Українська',
+        'selected': '✅ Мову змінено на {}'
+    }
+}
+
 def get_locale(language_code: str) -> dict:
     """Отримати локалізацію за кодом мови"""
     if not language_code:

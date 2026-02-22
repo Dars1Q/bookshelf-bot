@@ -5,7 +5,7 @@ from aiogram.filters import Command
 from aiogram.types import WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, MenuButtonWebApp
 from dotenv import load_dotenv
 import os
-from locales import get_locale
+from locales import get_locale, LANG_TEXTS
 
 # Загрузка переменных окружения
 load_dotenv()
@@ -20,11 +20,59 @@ logging.basicConfig(level=logging.INFO)
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
+# Обработчик команды /lang
+@dp.message(Command('lang'))
+async def cmd_lang(message: types.Message):
+    lang_code = message.from_user.language_code if message.from_user else 'ru'
+    loc = get_locale(lang_code)
+    lang_loc = LANG_TEXTS.get(lang_code, LANG_TEXTS['en'])
+    
+    keyboard = InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text=lang_loc['button_ru'], callback_data='lang_ru')],
+            [InlineKeyboardButton(text=lang_loc['button_en'], callback_data='lang_en')],
+            [InlineKeyboardButton(text=lang_loc['button_uk'], callback_data='lang_uk')],
+        ]
+    )
+    
+    await message.answer(lang_loc['title'], reply_markup=keyboard)
+
+# Обработчик выбора языка
+@dp.callback_query(lambda c: c.data.startswith('lang_'))
+async def process_lang(callback_query: types.CallbackQuery):
+    new_lang = callback_query.data.split('_')[1]
+    lang_loc = LANG_TEXTS.get(new_lang, LANG_TEXTS['en'])
+    
+    # Сохраняем язык в хранилище
+    await dp.storage.set_value(chat_id=callback_query.from_user.id, key='language', value=new_lang)
+    
+    lang_name = {'ru': 'Русский', 'en': 'English', 'uk': 'Українська'}[new_lang]
+    await callback_query.answer(lang_loc['selected'].format(lang_name))
+    await callback_query.message.delete()
+    
+    # Отправляем приветственное сообщение на новом языке
+    loc = get_locale(new_lang)
+    web_app_url = f"{WEB_APP_URL}?tg_id={callback_query.from_user.id}"
+    main_keyboard = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text=loc['start']['buttons']['shelf'], web_app=WebAppInfo(url=web_app_url))],
+            [KeyboardButton(text=loc['start']['buttons']['add']), KeyboardButton(text=loc['start']['buttons']['help'])],
+        ],
+        resize_keyboard=True
+    )
+    await callback_query.message.answer(loc['start']['text'], reply_markup=main_keyboard)
+
 # Обработчик /start
 @dp.message(Command('start'))
 async def cmd_start(message: types.Message):
-    # Получаем язык пользователя
-    lang_code = message.from_user.language_code if message.from_user else 'ru'
+    # Получаем сохранённый язык или определяем автоматически
+    saved_lang = await dp.storage.get_value(chat_id=message.from_user.id, key='language')
+    
+    if saved_lang and saved_lang in ['ru', 'en', 'uk']:
+        lang_code = saved_lang
+    else:
+        lang_code = message.from_user.language_code if message.from_user else 'ru'
+    
     loc = get_locale(lang_code)
     
     # Передаем Telegram ID в URL для главной кнопки
@@ -46,7 +94,8 @@ async def cmd_start(message: types.Message):
 # Обработчик кнопки "Открыть полку"
 @dp.message(lambda msg: msg.text and msg.text in ['📚 Открыть полку', '📚 Open Shelf', '📚 Відкрити полицю'])
 async def open_webapp(message: types.Message):
-    lang_code = message.from_user.language_code if message.from_user else 'ru'
+    saved_lang = await dp.storage.get_value(chat_id=message.from_user.id, key='language')
+    lang_code = saved_lang if saved_lang else (message.from_user.language_code if message.from_user else 'ru')
     loc = get_locale(lang_code)
     web_app_url = f"{WEB_APP_URL}?tg_id={message.from_user.id}"
     
@@ -62,7 +111,8 @@ async def open_webapp(message: types.Message):
 # Обработчик кнопки "Добавить книгу"
 @dp.message(lambda msg: msg.text and msg.text in ['➕ Добавить книгу', '➕ Add Book', '➕ Додати книгу'])
 async def add_book_start(message: types.Message):
-    lang_code = message.from_user.language_code if message.from_user else 'ru'
+    saved_lang = await dp.storage.get_value(chat_id=message.from_user.id, key='language')
+    lang_code = saved_lang if saved_lang else (message.from_user.language_code if message.from_user else 'ru')
     loc = get_locale(lang_code)
     
     await message.answer(loc['add_book']['title'])
@@ -71,7 +121,8 @@ async def add_book_start(message: types.Message):
 # Обработчик кнопки "Помощь"
 @dp.message(lambda msg: msg.text and msg.text in ['ℹ️ Помощь', 'ℹ️ Help', 'ℹ️ Допомога'])
 async def help_command(message: types.Message):
-    lang_code = message.from_user.language_code if message.from_user else 'ru'
+    saved_lang = await dp.storage.get_value(chat_id=message.from_user.id, key='language')
+    lang_code = saved_lang if saved_lang else (message.from_user.language_code if message.from_user else 'ru')
     loc = get_locale(lang_code)
     
     await message.answer(loc['help']['text'])
@@ -80,7 +131,8 @@ async def help_command(message: types.Message):
 @dp.message(lambda msg: msg.text and msg.text.startswith('/'))
 async def skip_command(message: types.Message):
     if message.text == '/skip':
-        lang_code = message.from_user.language_code if message.from_user else 'ru'
+        saved_lang = await dp.storage.get_value(chat_id=message.from_user.id, key='language')
+        lang_code = saved_lang if saved_lang else (message.from_user.language_code if message.from_user else 'ru')
         loc = get_locale(lang_code)
         
         state = await dp.storage.get_state(message.from_user.id)
@@ -117,7 +169,8 @@ async def show_rating_keyboard(message: types.Message, loc: dict):
 # Обработчик оценок
 @dp.callback_query(lambda c: c.data.startswith('rate_'))
 async def process_rating(callback_query: types.CallbackQuery):
-    lang_code = callback_query.from_user.language_code if callback_query.from_user else 'ru'
+    saved_lang = await dp.storage.get_value(chat_id=callback_query.from_user.id, key='language')
+    lang_code = saved_lang if saved_lang else (callback_query.from_user.language_code if callback_query.from_user else 'ru')
     loc = get_locale(lang_code)
     
     rating = callback_query.data.split('_')[1]
@@ -141,11 +194,12 @@ async def main():
     try:
         await bot.delete_webhook(drop_pending_updates=True)
 
-        # Устанавливаем кнопку меню (без tg_id, так как menu button не поддерживает динамические URL)
+        # Устанавливаем кнопку меню на английском (универсальный)
+        # Индивидуальная локализация работает через кнопки в чате
         await bot.set_chat_menu_button(
             menu_button=MenuButtonWebApp(
                 type='web_app',
-                text='📚 My Shelf',  # Будет обновлено для каждого пользователя
+                text='📚 Open Shelf',  # Универсальный текст
                 web_app=WebAppInfo(url=WEB_APP_URL)
             )
         )
@@ -153,6 +207,7 @@ async def main():
         logging.info('Бот запущен...')
         logging.info(f'Web App URL: {WEB_APP_URL}')
         logging.info('Localization: RU, EN, UK')
+        logging.info('Menu Button: 📚 Open Shelf (global)')
         await dp.start_polling(bot)
     except Exception as e:
         logging.error(f'Ошибка запуска бота: {e}')
