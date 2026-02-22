@@ -1,0 +1,564 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: var(--tg-theme-secondary-bg-color, linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%));
+  min-height: 100vh;
+  padding: 20px;
+}
+
+#root {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.app {
+  color: var(--tg-theme-text-color, #fff);
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.header h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5),
+               0 0 40px rgba(102, 126, 234, 0.5);
+  background: linear-gradient(90deg, #00f5ff, #ff00ff, #00f5ff);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 3s linear infinite;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
+.header p {
+  opacity: 0.8;
+  font-size: 1.1rem;
+  color: #a0a0a0;
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.loading-spinner {
+  font-size: 5rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+.loading p {
+  margin-top: 20px;
+  color: #888;
+}
+
+/* Форма */
+.add-book-form {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  margin-bottom: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.add-book-form h2 {
+  margin-bottom: 20px;
+  color: #00f5ff;
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #00f5ff;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 14px 18px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  font-size: 1rem;
+  color: #fff;
+  transition: all 0.3s;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #666;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: #00f5ff;
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.rating-input {
+  display: flex;
+  gap: 10px;
+}
+
+.rating-input button,
+.rating-input span {
+  width: 50px;
+  height: 50px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  color: #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rating-input button:hover,
+.rating-input span:hover {
+  border-color: #ffc107;
+  background: rgba(255, 193, 7, 0.1);
+  transform: scale(1.1);
+}
+
+.rating-input button.active,
+.rating-input span.active {
+  border-color: #ffc107;
+  background: rgba(255, 193, 7, 0.2);
+  box-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+  color: #ffc107;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #00f5ff 0%, #ff00ff 100%);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 40px rgba(0, 245, 255, 0.4),
+              0 0 20px rgba(255, 0, 255, 0.3);
+}
+
+/* Полки */
+.shelves-container {
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+  padding: 20px 0;
+}
+
+.shelf-row {
+  position: relative;
+  padding-top: 40px;
+}
+
+.shelf {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 20px;
+  padding: 0 20px;
+  min-height: 320px;
+}
+
+.shelf::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 20px;
+  background: linear-gradient(90deg, 
+    rgba(139, 90, 43, 0.8) 0%,
+    rgba(160, 100, 50, 0.9) 20%,
+    rgba(180, 120, 60, 1) 50%,
+    rgba(160, 100, 50, 0.9) 80%,
+    rgba(139, 90, 43, 0.8) 100%
+  );
+  border-radius: 4px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5),
+              inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.shelf::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 2px;
+}
+
+.shelf-bracket {
+  position: absolute;
+  bottom: 20px;
+  width: 30px;
+  height: 60px;
+  background: linear-gradient(180deg, #8b5a2b 0%, #5c3a1a 100%);
+  border-radius: 4px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+}
+
+.shelf-bracket.left {
+  left: 40px;
+}
+
+.shelf-bracket.right {
+  right: 40px;
+}
+
+.book-slot {
+  position: relative;
+  width: 220px;
+  height: 280px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 8px 8px 4px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.book-slot:hover {
+  border-color: rgba(0, 245, 255, 0.5);
+  background: rgba(0, 245, 255, 0.05);
+  transform: translateY(-5px);
+}
+
+.book-slot.empty::before {
+  content: '📚';
+  font-size: 4rem;
+  opacity: 0.3;
+  margin-bottom: 10px;
+}
+
+.book-slot.empty::after {
+  content: 'Добавить книгу';
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.9rem;
+}
+
+.book-on-shelf {
+  position: relative;
+  width: 220px;
+  height: 280px;
+  border-radius: 8px 8px 4px 4px;
+  overflow: hidden;
+  transition: all 0.3s;
+  background: #1a1a2e;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.book-on-shelf:hover {
+  transform: translateY(-10px) scale(1.02);
+  z-index: 10;
+}
+
+.book-on-shelf.has-cover {
+  animation: neonPulse 2s ease-in-out infinite;
+}
+
+@keyframes neonPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(0, 245, 255, 0.5),
+                0 0 40px rgba(0, 245, 255, 0.3),
+                0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(0, 245, 255, 0.7),
+                0 0 60px rgba(0, 245, 255, 0.4),
+                0 10px 30px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.book-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.book-cover-placeholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 5rem;
+}
+
+.book-info {
+  position: absolute;
+  bottom: -50px;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s;
+  pointer-events: none;
+}
+
+.book-on-shelf:hover .book-info {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.book-info-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.book-info-author {
+  font-size: 0.85rem;
+  color: #00f5ff;
+  margin-bottom: 6px;
+}
+
+.book-info-rating {
+  color: #ffc107;
+  font-size: 0.9rem;
+}
+
+.star {
+  color: #ffc107;
+}
+
+.star.empty {
+  color: #444;
+}
+
+.book-actions-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.book-on-shelf:hover .book-actions-overlay {
+  opacity: 1;
+}
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-edit-icon {
+  background: rgba(0, 245, 255, 0.2);
+  border: 1px solid rgba(0, 245, 255, 0.5);
+}
+
+.btn-edit-icon:hover {
+  background: rgba(0, 245, 255, 0.4);
+  transform: scale(1.1);
+}
+
+.btn-delete-icon {
+  background: rgba(255, 0, 80, 0.2);
+  border: 1px solid rgba(255, 0, 80, 0.5);
+}
+
+.btn-delete-icon:hover {
+  background: rgba(255, 0, 80, 0.4);
+  transform: scale(1.1);
+}
+
+/* Модальное окно */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.modal {
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(22, 33, 62, 0.95) 100%);
+  border-radius: 20px;
+  padding: 30px;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid rgba(0, 245, 255, 0.3);
+  box-shadow: 0 0 50px rgba(0, 245, 255, 0.2);
+}
+
+.modal h2 {
+  margin-bottom: 20px;
+  color: #00f5ff;
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+.btn-cancel {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Пустое состояние */
+.empty-state {
+  text-align: center;
+  padding: 80px 20px;
+}
+
+.empty-state-icon {
+  font-size: 6rem;
+  margin-bottom: 20px;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.empty-state h3 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.empty-state p {
+  color: #888;
+  font-size: 1.1rem;
+}
+
+/* Адаптивность */
+@media (max-width: 1024px) {
+  .shelf {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .shelf-bracket {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .header h1 {
+    font-size: 2rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .shelf {
+    padding: 0 10px;
+    min-height: 280px;
+  }
+
+  .book-slot,
+  .book-on-shelf {
+    width: 160px;
+    height: 220px;
+  }
+}

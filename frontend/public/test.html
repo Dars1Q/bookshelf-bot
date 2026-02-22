@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📚 Книжная полка - Test</title>
+  <style>
+    body {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      color: white;
+      font-family: sans-serif;
+      padding: 40px;
+      text-align: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
+    .status {
+      background: rgba(255,255,255,0.1);
+      padding: 30px;
+      border-radius: 16px;
+      margin: 20px auto;
+      max-width: 500px;
+    }
+    .success { color: #00ff88; }
+    .error { color: #ff4444; }
+    button {
+      background: linear-gradient(135deg, #00f5ff 0%, #ff00ff 100%);
+      color: white;
+      border: none;
+      padding: 16px 32px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>📚 Книжная полка</h1>
+  
+  <div class="status">
+    <h2 class="success">✅ Хостинг работает!</h2>
+    <p>Firebase Hosting подключён</p>
+  </div>
+
+  <div class="status">
+    <h3>🔗 Ссылки:</h3>
+    <p><a href="https://bookshelf-a70fd.web.app" style="color: #00f5ff;">https://bookshelf-a70fd.web.app</a></p>
+    <p>Открой эту ссылку в браузере (не в Telegram)</p>
+  </div>
+
+  <button onclick="window.location.href='https://bookshelf-a70fd.web.app'">
+    📚 Открыть полную версию
+  </button>
+
+  <script>
+    console.log('Test page loaded successfully!');
+    console.log('Firebase Hosting:', '✅ Working');
+  </script>
+</body>
+</html>
