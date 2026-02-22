@@ -381,36 +381,34 @@ body {
   font-size: 5rem;
 }
 
-/* Подсказка внутри обложки - скрывается вверху и скроллится */
+/* Подсказка внутри обложки - сверху, скроллится */
 .book-info {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;
   background: linear-gradient(to bottom, 
     rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.9) 20%,
-    rgba(0, 0, 0, 0.7) 50%,
-    rgba(0, 0, 0, 0.3) 80%,
+    rgba(0, 0, 0, 0.9) 10%,
+    rgba(0, 0, 0, 0.7) 30%,
+    rgba(0, 0, 0, 0.4) 60%,
     transparent 100%);
-  backdrop-filter: blur(5px);
-  padding: 60px 12px 12px;
+  backdrop-filter: blur(3px);
+  padding: 45px 12px 12px;
   border-radius: 8px 8px 4px 4px;
   opacity: 1;
-  transition: all 0.3s;
   pointer-events: auto;
-  max-height: 320px;
+  max-height: 50%;
   overflow-y: auto;
   font-size: 0.85rem;
   line-height: 1.5;
   color: #fff;
-  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 -10px 30px rgba(0, 0, 0, 0.5);
   border: none;
 }
 
 .book-info::-webkit-scrollbar {
-  width: 4px;
+  width: 3px;
 }
 
 .book-info::-webkit-scrollbar-track {
@@ -418,26 +416,33 @@ body {
 }
 
 .book-info::-webkit-scrollbar-thumb {
-  background: rgba(0, 245, 255, 0.6);
+  background: rgba(0, 245, 255, 0.8);
   border-radius: 2px;
 }
 
 .book-info::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 245, 255, 0.9);
+  background: rgba(0, 245, 255, 1);
 }
 
 .book-info-title {
   font-size: 1rem;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .book-info-author {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: #00f5ff;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.book-info-description {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.8rem;
+  line-height: 1.4;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 

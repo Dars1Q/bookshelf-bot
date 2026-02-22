@@ -380,11 +380,16 @@ function App() {
                       )}
                       
                       <div className="book-info">
+                        {book.rating && (
+                          <div className="book-info-rating" style={{ marginBottom: '8px' }}>
+                            {renderStars(book.rating)}
+                          </div>
+                        )}
                         <div className="book-info-title">{book.title}</div>
                         {book.author && <div className="book-info-author">{book.author}</div>}
-                        {book.rating && (
-                          <div className="book-info-rating">
-                            {renderStars(book.rating)}
+                        {book.description && (
+                          <div className="book-info-description" style={{ marginTop: '8px', fontSize: '0.8rem', opacity: 0.9 }}>
+                            {book.description}
                           </div>
                         )}
                       </div>
