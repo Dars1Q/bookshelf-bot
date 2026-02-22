@@ -310,7 +310,7 @@ body {
   position: relative;
   width: 100%;
   max-width: 220px;
-  height: 280px;
+  height: 320px;
   background: rgba(255, 255, 255, 0.03);
   border: 2px dashed rgba(255, 255, 255, 0.2);
   border-radius: 8px 8px 4px 4px;
@@ -321,6 +321,7 @@ body {
   transition: all 0.3s;
   cursor: pointer;
   flex-shrink: 0;
+  margin-bottom: 80px;
 }
 
 .book-slot:hover {
@@ -344,12 +345,13 @@ body {
   position: relative;
   width: 100%;
   max-width: 220px;
-  height: 280px;
+  height: 320px;
   border-radius: 8px 8px 4px 4px;
   overflow: hidden;
   transition: all 0.3s;
   background: #1a1a2e;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  margin-bottom: 80px;
 }
 
 .book-on-shelf:hover {
@@ -390,10 +392,10 @@ body {
   padding: 12px;
   border-radius: 8px;
   border: 1px solid rgba(0, 245, 255, 0.5);
-  opacity: 0;
-  transform: translateY(10px);
+  opacity: 1;
+  transform: translateY(0);
   transition: all 0.3s;
-  pointer-events: none;
+  pointer-events: auto;
   max-height: 180px;
   overflow-y: auto;
   font-size: 0.85rem;
@@ -418,11 +420,6 @@ body {
 
 .book-info::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 245, 255, 0.9);
-}
-
-.book-on-shelf:hover .book-info {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .book-info-title {
