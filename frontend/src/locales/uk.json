@@ -1,0 +1,47 @@
+{
+  "title": "Книжкова полиця",
+  "subtitle": "Ваша персональна колекція книг",
+  "emptyState": {
+    "title": "Полиця пуста",
+    "description": "Додайте свою першу книгу!",
+    "button": "➕ Додати першу книгу"
+  },
+  "addButton": "➕ Додати книгу",
+  "form": {
+    "editTitle": "✏️ Редагувати книгу",
+    "newTitle": "➕ Нова книга",
+    "labels": {
+      "title": "Назва *",
+      "author": "Автор",
+      "cover": "Обкладинка (URL)",
+      "description": "Опис",
+      "rating": "Оцінка"
+    },
+    "placeholders": {
+      "title": "Введіть назву",
+      "author": "Ім'я автора",
+      "cover": "https://example.com/cover.jpg",
+      "description": "Короткий опис книги"
+    },
+    "save": "Зберегти",
+    "add": "Додати на полицю",
+    "cancel": "Скасувати"
+  },
+  "loading": "Завантажуємо полицю...",
+  "bookInfo": {
+    "edit": "✏️",
+    "delete": "🗑️",
+    "confirmDelete": "Видалити цю книгу?"
+  },
+  "shelf": {
+    "emptySlot": "Додати книгу"
+  },
+  "mainButton": {
+    "empty": "➕ ДОДАТИ ПЕРШУ КНИГУ",
+    "hasBooks": "➕ ДОДАТИ КНИГУ"
+  },
+  "errors": {
+    "loadBooks": "Помилка завантаження даних! Перевірте консоль (F12)",
+    "saveBook": "Помилка збереження! Перевірте налаштування Firebase."
+  }
+}

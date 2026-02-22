@@ -1,19 +1,20 @@
 import { useState, useEffect } from 'react';
 import WebApp from '@twa-dev/sdk';
 import { initializeApp } from 'firebase/app';
-import { 
-  getFirestore, 
-  collection, 
-  doc, 
-  getDocs, 
-  addDoc, 
-  updateDoc, 
+import {
+  getFirestore,
+  collection,
+  doc,
+  getDocs,
+  addDoc,
+  updateDoc,
   deleteDoc,
   query,
   orderBy,
   Timestamp
 } from 'firebase/firestore';
 import { firebaseConfig } from './firebase';
+import { useTranslation } from './hooks/useTranslation';
 import './App.css';
 
 // Инициализация Firebase
@@ -54,6 +55,7 @@ function App() {
   const [formData, setFormData] = useState<BookFormData>(initialFormData);
   const [telegramId, setTelegramId] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const { t, lang, changeLanguage } = useTranslation();
 
   // Инициализация Telegram Web App
   useEffect(() => {
@@ -111,7 +113,8 @@ function App() {
   useEffect(() => {
     if (!telegramId) return;
 
-    WebApp.MainButton.setText(books.length === 0 ? '➕ ДОБАВИТЬ ПЕРВУЮ КНИГУ' : '➕ ДОБАВИТЬ КНИГУ');
+    const buttonText = books.length === 0 ? t.mainButton.empty : t.mainButton.hasBooks;
+    WebApp.MainButton.setText(buttonText);
     WebApp.MainButton.show();
     WebApp.MainButton.onClick(() => {
       setShowForm(true);
@@ -122,7 +125,7 @@ function App() {
         setShowForm(true);
       });
     };
-  }, [books.length, telegramId]);
+  }, [books.length, telegramId, t]);
 
   const fetchBooks = async () => {
     if (!telegramId) {
@@ -202,7 +205,7 @@ function App() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Удалить эту книгу?')) return;
+    if (!confirm(t.bookInfo.confirmDelete)) return;
 
     try {
       const bookRef = doc(db, 'users', telegramId, 'books', id);
@@ -237,7 +240,7 @@ function App() {
       <div className="app">
         <div className="loading">
           <div className="loading-spinner">📚</div>
-          <p>Загружаем полку...</p>
+          <p>{t.loading}</p>
         </div>
       </div>
     );
@@ -246,60 +249,82 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>📚 Книжная полка</h1>
-        <p>Ваша персональная коллекция книг</p>
+        <h1>📚 {t.title}</h1>
+        <p>{t.subtitle}</p>
+        
+        {/* Переключатель языка */}
+        <div className="language-switcher">
+          <button 
+            className={lang === 'ru' ? 'active' : ''} 
+            onClick={() => changeLanguage('ru')}
+          >
+            RU
+          </button>
+          <button 
+            className={lang === 'en' ? 'active' : ''} 
+            onClick={() => changeLanguage('en')}
+          >
+            EN
+          </button>
+          <button 
+            className={lang === 'uk' ? 'active' : ''} 
+            onClick={() => changeLanguage('uk')}
+          >
+            UK
+          </button>
+        </div>
       </header>
 
       {showForm && (
         <div className="modal-overlay" onClick={() => setShowForm(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>{editingBook ? '✏️ Редактировать книгу' : '➕ Новая книга'}</h2>
+            <h2>{editingBook ? t.form.editTitle : t.form.newTitle}</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-row">
                 <div className="form-group">
-                  <label>Название *</label>
+                  <label>{t.form.labels.title}</label>
                   <input
                     type="text"
                     value={formData.title}
                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                    placeholder="Введите название"
+                    placeholder={t.form.placeholders.title}
                     required
                   />
                 </div>
 
                 <div className="form-group">
-                  <label>Автор</label>
+                  <label>{t.form.labels.author}</label>
                   <input
                     type="text"
                     value={formData.author}
                     onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                    placeholder="Имя автора"
+                    placeholder={t.form.placeholders.author}
                   />
                 </div>
               </div>
 
               <div className="form-group">
-                <label>Обложка (URL)</label>
+                <label>{t.form.labels.cover}</label>
                 <input
                   type="url"
                   value={formData.cover_url}
                   onChange={(e) => setFormData({ ...formData, cover_url: e.target.value })}
-                  placeholder="https://example.com/cover.jpg"
+                  placeholder={t.form.placeholders.cover}
                 />
               </div>
 
               <div className="form-group">
-                <label>Описание</label>
+                <label>{t.form.labels.description}</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="Краткое описание книги"
+                  placeholder={t.form.placeholders.description}
                   rows={3}
                 />
               </div>
 
               <div className="form-group">
-                <label>Оценка</label>
+                <label>{t.form.labels.rating}</label>
                 <div className="rating-input">
                   {renderStars(formData.rating, true)}
                 </div>
@@ -315,10 +340,10 @@ function App() {
                     setFormData(initialFormData);
                   }}
                 >
-                  Отмена
+                  {t.form.cancel}
                 </button>
                 <button type="submit" className="btn-primary">
-                  {editingBook ? 'Сохранить' : 'Добавить на полку'}
+                  {editingBook ? t.form.save : t.form.add}
                 </button>
               </div>
             </form>
@@ -329,10 +354,10 @@ function App() {
       {books.length === 0 ? (
         <div className="empty-state">
           <div className="empty-state-icon">📖</div>
-          <h3>Полка пуста</h3>
-          <p>Добавьте свою первую книгу!</p>
-          <button 
-            className="btn-primary" 
+          <h3>{t.emptyState.title}</h3>
+          <p>{t.emptyState.description}</p>
+          <button
+            className="btn-primary"
             onClick={() => setShowForm(true)}
             style={{
               marginTop: '20px',
@@ -340,7 +365,7 @@ function App() {
               fontSize: '1.1rem'
             }}
           >
-            ➕ Добавить первую книгу
+            {t.emptyState.button}
           </button>
         </div>
       ) : (
@@ -411,8 +436,8 @@ function App() {
 
           {/* Большая кнопка добавления книги */}
           <div style={{ textAlign: 'center', marginTop: '40px' }}>
-            <button 
-              className="btn-primary" 
+            <button
+              className="btn-primary"
               onClick={() => setShowForm(true)}
               style={{
                 padding: '20px 40px',
@@ -424,7 +449,7 @@ function App() {
               }}
             >
               <span>➕</span>
-              <span>Добавить книгу</span>
+              <span>{t.addButton}</span>
             </button>
           </div>
         </div>

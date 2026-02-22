@@ -1,0 +1,47 @@
+{
+  "title": "Книжная полка",
+  "subtitle": "Ваша персональная коллекция книг",
+  "emptyState": {
+    "title": "Полка пуста",
+    "description": "Добавьте свою первую книгу!",
+    "button": "➕ Добавить первую книгу"
+  },
+  "addButton": "➕ Добавить книгу",
+  "form": {
+    "editTitle": "✏️ Редактировать книгу",
+    "newTitle": "➕ Новая книга",
+    "labels": {
+      "title": "Название *",
+      "author": "Автор",
+      "cover": "Обложка (URL)",
+      "description": "Описание",
+      "rating": "Оценка"
+    },
+    "placeholders": {
+      "title": "Введите название",
+      "author": "Имя автора",
+      "cover": "https://example.com/cover.jpg",
+      "description": "Краткое описание книги"
+    },
+    "save": "Сохранить",
+    "add": "Добавить на полку",
+    "cancel": "Отмена"
+  },
+  "loading": "Загружаем полку...",
+  "bookInfo": {
+    "edit": "✏️",
+    "delete": "🗑️",
+    "confirmDelete": "Удалить эту книгу?"
+  },
+  "shelf": {
+    "emptySlot": "Добавить книгу"
+  },
+  "mainButton": {
+    "empty": "➕ ДОБАВИТЬ ПЕРВУЮ КНИГУ",
+    "hasBooks": "➕ ДОБАВИТЬ КНИГУ"
+  },
+  "errors": {
+    "loadBooks": "Ошибка загрузки данных! Проверь консоль (F12)",
+    "saveBook": "Ошибка сохранения! Проверь настройки Firebase."
+  }
+}

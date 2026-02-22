@@ -23,6 +23,7 @@ body {
 .header {
   text-align: center;
   margin-bottom: 40px;
+  position: relative;
 }
 
 .header h1 {
@@ -35,6 +36,39 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: shine 3s linear infinite;
+}
+
+/* Переключатель языка */
+.language-switcher {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.language-switcher button {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.language-switcher button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+.language-switcher button.active {
+  background: linear-gradient(135deg, #00f5ff 0%, #ff00ff 100%);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.4);
 }
 
 @keyframes shine {

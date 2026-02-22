@@ -1,0 +1,47 @@
+{
+  "title": "BookShelf",
+  "subtitle": "Your personal book collection",
+  "emptyState": {
+    "title": "Shelf is empty",
+    "description": "Add your first book!",
+    "button": "➕ Add First Book"
+  },
+  "addButton": "➕ Add Book",
+  "form": {
+    "editTitle": "✏️ Edit Book",
+    "newTitle": "➕ New Book",
+    "labels": {
+      "title": "Title *",
+      "author": "Author",
+      "cover": "Cover (URL)",
+      "description": "Description",
+      "rating": "Rating"
+    },
+    "placeholders": {
+      "title": "Enter title",
+      "author": "Author name",
+      "cover": "https://example.com/cover.jpg",
+      "description": "Brief description"
+    },
+    "save": "Save",
+    "add": "Add to Shelf",
+    "cancel": "Cancel"
+  },
+  "loading": "Loading shelf...",
+  "bookInfo": {
+    "edit": "✏️",
+    "delete": "🗑️",
+    "confirmDelete": "Delete this book?"
+  },
+  "shelf": {
+    "emptySlot": "Add book"
+  },
+  "mainButton": {
+    "empty": "➕ ADD FIRST BOOK",
+    "hasBooks": "➕ ADD BOOK"
+  },
+  "errors": {
+    "loadBooks": "Error loading data! Check console (F12)",
+    "saveBook": "Save error! Check Firebase settings."
+  }
+}
