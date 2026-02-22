@@ -351,7 +351,6 @@ body {
   transition: all 0.3s;
   background: #1a1a2e;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  margin-bottom: 80px;
 }
 
 .book-on-shelf:hover {
@@ -382,40 +381,45 @@ body {
   font-size: 5rem;
 }
 
+/* Подсказка внутри обложки - скрывается вверху и скроллится */
 .book-info {
   position: absolute;
-  bottom: -70px;
-  left: 5px;
-  right: 5px;
-  background: rgba(0, 0, 0, 0.95);
-  backdrop-filter: blur(10px);
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(0, 245, 255, 0.5);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, 
+    rgba(0, 0, 0, 0.95) 0%,
+    rgba(0, 0, 0, 0.9) 20%,
+    rgba(0, 0, 0, 0.7) 50%,
+    rgba(0, 0, 0, 0.3) 80%,
+    transparent 100%);
+  backdrop-filter: blur(5px);
+  padding: 60px 12px 12px;
+  border-radius: 8px 8px 4px 4px;
   opacity: 1;
-  transform: translateY(0);
   transition: all 0.3s;
   pointer-events: auto;
-  max-height: 180px;
+  max-height: 320px;
   overflow-y: auto;
   font-size: 0.85rem;
   line-height: 1.5;
   color: #fff;
-  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.8);
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.8);
+  border: none;
 }
 
 .book-info::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 .book-info::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 3px;
+  background: transparent;
 }
 
 .book-info::-webkit-scrollbar-thumb {
   background: rgba(0, 245, 255, 0.6);
-  border-radius: 3px;
+  border-radius: 2px;
 }
 
 .book-info::-webkit-scrollbar-thumb:hover {
@@ -423,24 +427,24 @@ body {
 }
 
 .book-info-title {
-  font-size: 0.95rem;
+  font-size: 1rem;
   font-weight: 700;
   color: #fff;
-  margin-bottom: 4px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin-bottom: 6px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .book-info-author {
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   color: #00f5ff;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .book-info-rating {
-  color: #ffc107;
-  font-size: 0.9rem;
+  color: #ffd700;
+  font-size: 1rem;
+  text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
 }
 
 .star {
