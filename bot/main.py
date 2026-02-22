@@ -12,6 +12,7 @@ load_dotenv()
 
 BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 WEB_APP_URL = os.getenv('WEB_APP_URL', 'https://bookshelf-a70fd.web.app')
+WEB_APP_VERSION = 'v2'  # Меняем при обновлении для сброса кэша Telegram
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
@@ -28,7 +29,7 @@ async def cmd_start(message: types.Message):
     loc = get_locale(lang_code)
     
     # Передаем Telegram ID в URL для главной кнопки
-    web_app_url = f"{WEB_APP_URL}?tg_id={message.from_user.id}"
+    web_app_url = f"{WEB_APP_URL}?tg_id={message.from_user.id}&v={WEB_APP_VERSION}"
     
     main_keyboard = ReplyKeyboardMarkup(
         keyboard=[
@@ -48,7 +49,7 @@ async def cmd_start(message: types.Message):
 async def open_webapp(message: types.Message):
     lang_code = message.from_user.language_code if message.from_user else 'ru'
     loc = get_locale(lang_code)
-    web_app_url = f"{WEB_APP_URL}?tg_id={message.from_user.id}"
+    web_app_url = f"{WEB_APP_URL}?tg_id={message.from_user.id}&v={WEB_APP_VERSION}"
     
     await message.answer(
         loc['shelf']['text'],
@@ -125,7 +126,7 @@ async def process_rating(callback_query: types.CallbackQuery):
     await callback_query.message.answer(loc['add_book']['added'])
     
     # Возвращаем главное меню с правильным языком
-    web_app_url = f"{WEB_APP_URL}?tg_id={callback_query.from_user.id}"
+    web_app_url = f"{WEB_APP_URL}?tg_id={callback_query.from_user.id}&v={WEB_APP_VERSION}"
     main_keyboard = ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text=loc['start']['buttons']['shelf'], web_app=WebAppInfo(url=web_app_url))],
@@ -147,7 +148,7 @@ async def main():
             menu_button=MenuButtonWebApp(
                 type='web_app',
                 text='📚 Open Shelf',  # Универсальный текст
-                web_app=WebAppInfo(url=WEB_APP_URL)
+                web_app=WebAppInfo(url=f"{WEB_APP_URL}?v={WEB_APP_VERSION}")
             )
         )
 
