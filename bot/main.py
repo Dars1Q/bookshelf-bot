@@ -31,6 +31,15 @@ main_keyboard = ReplyKeyboardMarkup(
 # Обработчик /start
 @dp.message(Command('start'))
 async def cmd_start(message: types.Message):
+    # Передаем Telegram ID в URL для главной кнопки
+    web_app_url = f"{WEB_APP_URL}?tg_id={message.from_user.id}"
+    main_keyboard_with_url = ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text='📚 Открыть полку', web_app=WebAppInfo(url=web_app_url))],
+            [KeyboardButton(text='➕ Добавить книгу'), KeyboardButton(text='ℹ️ Помощь')],
+        ],
+        resize_keyboard=True
+    )
     await message.answer(
         f"👋 Привет! Я бот для ведения книжной полки.\n\n"
         f"📝 Я помогу тебе:\n"
@@ -38,17 +47,19 @@ async def cmd_start(message: types.Message):
         f"• Ставить оценки прочитанным книгам\n"
         f"• Хранить свою коллекцию\n\n"
         f"📲 Нажми кнопку ниже или меню слева!",
-        reply_markup=main_keyboard
+        reply_markup=main_keyboard_with_url
     )
 
 # Обработчик кнопки "Открыть полку"
 @dp.message(lambda msg: msg.text == '📚 Открыть полку')
 async def open_webapp(message: types.Message):
+    # Передаем Telegram ID в URL
+    web_app_url = f"{WEB_APP_URL}?tg_id={message.from_user.id}"
     await message.answer(
-        f'📖 Твоя книжная полка:\n\n🔗 {WEB_APP_URL}',
+        f'📖 Твоя книжная полка:',
         reply_markup=InlineKeyboardMarkup(
             inline_keyboard=[[
-                InlineKeyboardButton(text='📚 Открыть полку', web_app=WebAppInfo(url=WEB_APP_URL))
+                InlineKeyboardButton(text='📚 Открыть полку', web_app=WebAppInfo(url=web_app_url))
             ]]
         )
     )
@@ -119,8 +130,9 @@ async def process_rating(callback_query: types.CallbackQuery):
 async def main():
     try:
         await bot.delete_webhook(drop_pending_updates=True)
-        
-        # Устанавливаем кнопку меню
+
+        # Устанавливаем кнопку меню с URL (без tg_id, так как menu button не поддерживает динамические URL)
+        # Пользователь будет получать tg_id через кнопку в чате
         await bot.set_chat_menu_button(
             menu_button=MenuButtonWebApp(
                 type='web_app',
@@ -128,7 +140,7 @@ async def main():
                 web_app=WebAppInfo(url=WEB_APP_URL)
             )
         )
-        
+
         logging.info('Бот запущен...')
         logging.info(f'Web App URL: {WEB_APP_URL}')
         await dp.start_polling(bot)

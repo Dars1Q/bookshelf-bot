@@ -60,20 +60,43 @@ function App() {
     WebApp.ready();
     WebApp.expand();
 
+    // Получаем Telegram ID из URL параметра (передается ботом)
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlTgId = urlParams.get('tg_id');
+
     const user = WebApp.initDataUnsafe?.user;
-    if (user?.id) {
+    
+    // Приоритет: 1) URL параметр от бота, 2) Telegram Web App data, 3) localStorage
+    if (urlTgId) {
+      // Бот передал ID в URL - используем его
+      const tgId = `tg_${urlTgId}`;
+      setTelegramId(tgId);
+      localStorage.setItem('telegram_id', tgId);
+      console.log('Telegram ID из URL:', tgId);
+    } else if (user?.id) {
+      // Открыто в Telegram но без URL параметра
       const tgId = `tg_${user.id}`;
       setTelegramId(tgId);
+      localStorage.setItem('telegram_id', tgId);
+      console.log('Telegram ID из WebApp:', tgId);
       
       const username = [user.first_name, user.last_name].filter(Boolean).join(' ') || user.username;
       if (username) {
         localStorage.setItem('telegram_username', username);
       }
     } else {
+      // Открыто в браузере - берем из localStorage
       const storedId = localStorage.getItem('telegram_id');
-      const id = storedId || 'user_' + Math.random().toString(36).substr(2, 9);
-      setTelegramId(id);
-      localStorage.setItem('telegram_id', id);
+      if (storedId) {
+        setTelegramId(storedId);
+        console.log('Telegram ID из localStorage:', storedId);
+      } else {
+        // Первый запуск в браузере - создаем временный ID
+        const id = 'user_' + Math.random().toString(36).substr(2, 9);
+        setTelegramId(id);
+        localStorage.setItem('telegram_id', id);
+        console.log('Временный ID:', id);
+      }
     }
   }, []);
 
