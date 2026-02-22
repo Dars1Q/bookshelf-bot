@@ -38,6 +38,7 @@ desktop.ini
 frontend/dist/
 frontend/node_modules/
 frontend/tsconfig.tsbuildinfo
+frontend/index-cdn.html
 
 # Firebase
 .firebaserc
