@@ -381,21 +381,21 @@ body {
   font-size: 5rem;
 }
 
-/* Подсказка внутри обложки - сверху, скроллится */
+/* Подсказка внутри обложки - снизу, скроллится */
 .book-info {
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
-  background: linear-gradient(to bottom, 
+  background: linear-gradient(to top,
     rgba(0, 0, 0, 0.95) 0%,
     rgba(0, 0, 0, 0.9) 10%,
     rgba(0, 0, 0, 0.7) 30%,
     rgba(0, 0, 0, 0.4) 60%,
     transparent 100%);
   backdrop-filter: blur(3px);
-  padding: 45px 12px 12px;
-  border-radius: 8px 8px 4px 4px;
+  padding: 12px;
+  border-radius: 4px 4px 8px 8px;
   opacity: 1;
   pointer-events: auto;
   max-height: 50%;
@@ -403,8 +403,18 @@ body {
   font-size: 0.85rem;
   line-height: 1.5;
   color: #fff;
-  box-shadow: inset 0 -10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.5);
   border: none;
+  transition: max-height 0.3s ease;
+}
+
+.book-info:not(.book-info-expanded) {
+  max-height: 45px;
+  overflow: hidden;
+}
+
+.book-info-expanded {
+  max-height: 80% !important;
 }
 
 .book-info::-webkit-scrollbar {
@@ -422,6 +432,40 @@ body {
 
 .book-info::-webkit-scrollbar-thumb:hover {
   background: rgba(0, 245, 255, 1);
+}
+
+.book-info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.book-info-header:hover {
+  opacity: 0.9;
+}
+
+.book-info-toggle {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.6);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.book-info-expanded .book-info-toggle {
+  transform: rotate(180deg);
+}
+
+.book-info-content {
+  margin-top: 8px;
+  opacity: 1;
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+.book-info:not(.book-info-expanded) .book-info-content {
+  display: none;
 }
 
 .book-info-title {
@@ -450,6 +494,8 @@ body {
   color: #ffd700;
   font-size: 1rem;
   text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+  display: flex;
+  align-items: center;
 }
 
 .star {

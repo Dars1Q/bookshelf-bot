@@ -380,18 +380,30 @@ function App() {
                       )}
                       
                       <div className="book-info">
-                        {book.rating && (
-                          <div className="book-info-rating" style={{ marginBottom: '8px' }}>
-                            {renderStars(book.rating)}
-                          </div>
-                        )}
-                        <div className="book-info-title">{book.title}</div>
-                        {book.author && <div className="book-info-author">{book.author}</div>}
-                        {book.description && (
-                          <div className="book-info-description" style={{ marginTop: '8px', fontSize: '0.8rem', opacity: 0.9 }}>
-                            {book.description}
-                          </div>
-                        )}
+                        <div
+                          className="book-info-header"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const info = (e.target as HTMLElement).closest('.book-info');
+                            info?.classList.toggle('book-info-expanded');
+                          }}
+                        >
+                          {book.rating && (
+                            <div className="book-info-rating">
+                              {renderStars(book.rating)}
+                            </div>
+                          )}
+                          <span className="book-info-toggle">▼</span>
+                        </div>
+                        <div className="book-info-content">
+                          <div className="book-info-title">{book.title}</div>
+                          {book.author && <div className="book-info-author">{book.author}</div>}
+                          {book.description && (
+                            <div className="book-info-description" style={{ marginTop: '8px', fontSize: '0.8rem', opacity: 0.9 }}>
+                              {book.description}
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       <div className="book-actions-overlay">
