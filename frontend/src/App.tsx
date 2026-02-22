@@ -109,23 +109,13 @@ function App() {
     }
   }, [telegramId]);
 
-  // Настройка MainButton
+  // Настройка MainButton - скрываем так как есть кнопка в приложении
   useEffect(() => {
     if (!telegramId) return;
 
-    const buttonText = books.length === 0 ? t.mainButton.empty : t.mainButton.hasBooks;
-    WebApp.MainButton.setText(buttonText);
-    WebApp.MainButton.show();
-    WebApp.MainButton.onClick(() => {
-      setShowForm(true);
-    });
-
-    return () => {
-      WebApp.MainButton.offClick(() => {
-        setShowForm(true);
-      });
-    };
-  }, [books.length, telegramId, t]);
+    // Скрываем MainButton чтобы не дублировать кнопку в приложении
+    WebApp.MainButton.hide();
+  }, [telegramId]);
 
   const fetchBooks = async () => {
     if (!telegramId) {
@@ -224,7 +214,7 @@ function App() {
         style={{ cursor: interactive ? 'pointer' : 'default' }}
         onClick={() => interactive && setFormData({ ...formData, rating: star === formData.rating ? null : star })}
       >
-        ★
+        {star <= (rating || 0) ? '★' : '☆'}
       </span>
     ));
   };
@@ -249,7 +239,7 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>📚 {t.title}</h1>
+        <h1><span>📚</span> <span className="title-text">{t.title}</span></h1>
         <p>{t.subtitle}</p>
         
         {/* Переключатель языка */}
@@ -442,14 +432,10 @@ function App() {
               style={{
                 padding: '20px 40px',
                 fontSize: '1.2rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px',
                 margin: '0 auto'
               }}
             >
-              <span>➕</span>
-              <span>{t.addButton}</span>
+              {t.addButton}
             </button>
           </div>
         </div>
