@@ -35,6 +35,7 @@ interface Book {
   status: BookStatus;
   created_at?: any;
   completed_date?: string | null;
+  genre?: string | null;
 }
 
 interface BookFormData {
@@ -47,6 +48,7 @@ interface BookFormData {
   number: string;
   status: BookStatus;
   completed_date: string;
+  genre: string;
 }
 
 const initialFormData: BookFormData = {
@@ -59,6 +61,7 @@ const initialFormData: BookFormData = {
   number: '',
   status: 'reading',
   completed_date: '',
+  genre: '',
 };
 
 const BOOKS_PER_SHELF = 4;
@@ -286,6 +289,7 @@ function App() {
           number: formData.number || null,
           status: formData.status,
           completed_date: formData.status === 'completed' ? (formData.completed_date || new Date().toISOString().split('T')[0]) : null,
+          genre: formData.genre || null,
           created_at: Timestamp.now(),
         });
       }
@@ -312,6 +316,7 @@ function App() {
       number: book.number?.toString() || '',
       status: book.status,
       completed_date: book.completed_date || '',
+      genre: book.genre || '',
     });
     setShowForm(true);
   };
@@ -528,12 +533,22 @@ function App() {
               </div>
 
               <div className="form-group">
-                <label>{t.form.labels.description}</label>
+                <label>{formData.status === 'reading' ? (t.form.labels.comment || 'Комментарий') : (t.form.labels.description || 'Описание')}</label>
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder={t.form.placeholders.description}
+                  placeholder={formData.status === 'reading' ? 'Заметки о книге...' : t.form.placeholders.description}
                   rows={3}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>{t.form.labels.genre || 'Жанр'}</label>
+                <input
+                  type="text"
+                  value={formData.genre}
+                  onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
+                  placeholder={t.form.placeholders.genre || 'Например: Фантастика'}
                 />
               </div>
 

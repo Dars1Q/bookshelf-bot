@@ -15,18 +15,21 @@
       "author": "Author",
       "cover": "Cover (URL)",
       "description": "Description",
+      "comment": "Comment",
       "rating": "Rating",
       "status": "Status",
       "cycle": "Series",
       "number": "No. in Series",
-      "completedDate": "Date Completed"
+      "completedDate": "Date Completed",
+      "genre": "Genre"
     },
     "placeholders": {
       "title": "Enter title",
       "author": "Author name",
       "cover": "https://example.com/cover.jpg",
       "description": "Brief description",
-      "cycle": "e.g. The Witcher"
+      "cycle": "e.g. The Witcher",
+      "genre": "e.g. Fantasy"
     },
     "save": "Save",
     "add": "Add to Shelf",

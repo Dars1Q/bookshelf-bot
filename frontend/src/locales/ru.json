@@ -15,18 +15,21 @@
       "author": "Автор",
       "cover": "Обложка (URL)",
       "description": "Описание",
+      "comment": "Комментарий",
       "rating": "Оценка",
       "status": "Статус",
       "cycle": "Цикл",
       "number": "№ в цикле",
-      "completedDate": "Дата прочтения"
+      "completedDate": "Дата прочтения",
+      "genre": "Жанр"
     },
     "placeholders": {
       "title": "Введите название",
       "author": "Имя автора",
       "cover": "https://example.com/cover.jpg",
       "description": "Краткое описание книги",
-      "cycle": "Например: Ведьмак"
+      "cycle": "Например: Ведьмак",
+      "genre": "Например: Фантастика"
     },
     "save": "Сохранить",
     "add": "Добавить на полку",

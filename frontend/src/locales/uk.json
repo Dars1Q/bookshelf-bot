@@ -15,18 +15,21 @@
       "author": "Автор",
       "cover": "Обкладинка (URL)",
       "description": "Опис",
+      "comment": "Коментар",
       "rating": "Оцінка",
       "status": "Статус",
       "cycle": "Цикл",
       "number": "№ в циклі",
-      "completedDate": "Дата прочитання"
+      "completedDate": "Дата прочитання",
+      "genre": "Жанр"
     },
     "placeholders": {
       "title": "Введіть назву",
       "author": "Ім'я автора",
       "cover": "https://example.com/cover.jpg",
       "description": "Короткий опис книги",
-      "cycle": "Наприклад: Відьмак"
+      "cycle": "Наприклад: Відьмак",
+      "genre": "Наприклад: Фантастика"
     },
     "save": "Зберегти",
     "add": "Додати на полицю",

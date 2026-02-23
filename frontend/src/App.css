@@ -356,12 +356,11 @@ body {
   max-width: 50px;
   background: linear-gradient(to top, rgba(0, 245, 255, 0.3) 0%, rgba(255, 0, 255, 0.3) 100%);
   border-radius: 8px 8px 0 0;
-  transition: all 0.3s;
+  transition: height 0.5s ease;
   position: relative;
   display: flex;
   align-items: flex-end;
   justify-content: center;
-  padding-bottom: 5px;
   min-height: 4px;
 }
 
@@ -371,7 +370,6 @@ body {
 }
 
 .chart-bar:hover {
-  transform: scaleY(1.05);
   box-shadow: 0 0 30px rgba(0, 245, 255, 0.6);
 }
 
@@ -380,10 +378,11 @@ body {
   font-weight: 700;
   font-size: 0.9rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-  transform: translateY(-100%);
-  margin-bottom: 5px;
   position: absolute;
-  top: -25px;
+  top: -22px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 .chart-label {
