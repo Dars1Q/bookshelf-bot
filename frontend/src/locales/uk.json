@@ -33,7 +33,7 @@
   },
   "tabs": {
     "reading": {
-      "label": "Читаю",
+      "label": "Не дочитано",
       "icon": "📖"
     },
     "want_to_read": {
