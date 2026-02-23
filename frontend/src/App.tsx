@@ -28,6 +28,8 @@ interface Book {
   description: string | null;
   cover_url: string | null;
   rating: number | null;
+  cycle: string | null;
+  number: number | null;
 }
 
 interface BookFormData {
@@ -36,6 +38,8 @@ interface BookFormData {
   description: string;
   cover_url: string;
   rating: number | null;
+  cycle: string;
+  number: string;
 }
 
 const initialFormData: BookFormData = {
@@ -44,6 +48,8 @@ const initialFormData: BookFormData = {
   description: '',
   cover_url: '',
   rating: null,
+  cycle: '',
+  number: '',
 };
 
 const BOOKS_PER_SHELF = 4;
@@ -148,10 +154,10 @@ function App() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     try {
       const booksRef = collection(db, 'users', telegramId, 'books');
-      
+
       if (editingBook) {
         const bookRef = doc(db, 'users', telegramId, 'books', editingBook.id);
         await updateDoc(bookRef, {
@@ -160,6 +166,8 @@ function App() {
           description: formData.description || null,
           cover_url: formData.cover_url || null,
           rating: formData.rating || null,
+          cycle: formData.cycle || null,
+          number: formData.number ? parseInt(formData.number) : null,
         });
       } else {
         await addDoc(booksRef, {
@@ -168,6 +176,8 @@ function App() {
           description: formData.description || null,
           cover_url: formData.cover_url || null,
           rating: formData.rating || null,
+          cycle: formData.cycle || null,
+          number: formData.number ? parseInt(formData.number) : null,
           created_at: Timestamp.now(),
         });
       }
@@ -190,6 +200,8 @@ function App() {
       description: book.description || '',
       cover_url: book.cover_url || '',
       rating: book.rating,
+      cycle: book.cycle || '',
+      number: book.number?.toString() || '',
     });
     setShowForm(true);
   };
@@ -241,28 +253,29 @@ function App() {
       <header className="header">
         <h1><span>📚</span> <span className="title-text">{t.title}</span></h1>
         <p>{t.subtitle}</p>
-        
-        {/* Переключатель языка */}
+
+        {/* Переключатель языка - скрыт
         <div className="language-switcher">
-          <button 
-            className={lang === 'ru' ? 'active' : ''} 
+          <button
+            className={lang === 'ru' ? 'active' : ''}
             onClick={() => changeLanguage('ru')}
           >
             RU
           </button>
-          <button 
-            className={lang === 'en' ? 'active' : ''} 
+          <button
+            className={lang === 'en' ? 'active' : ''}
             onClick={() => changeLanguage('en')}
           >
             EN
           </button>
-          <button 
-            className={lang === 'uk' ? 'active' : ''} 
+          <button
+            className={lang === 'uk' ? 'active' : ''}
             onClick={() => changeLanguage('uk')}
           >
             UK
           </button>
         </div>
+        */}
       </header>
 
       {showForm && (
@@ -311,6 +324,29 @@ function App() {
                   placeholder={t.form.placeholders.description}
                   rows={3}
                 />
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Цикл</label>
+                  <input
+                    type="text"
+                    value={formData.cycle}
+                    onChange={(e) => setFormData({ ...formData, cycle: e.target.value })}
+                    placeholder="Например: Ведьмак"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label>№ в цикле</label>
+                  <input
+                    type="number"
+                    value={formData.number}
+                    onChange={(e) => setFormData({ ...formData, number: e.target.value })}
+                    placeholder="1"
+                    min="1"
+                  />
+                </div>
               </div>
 
               <div className="form-group">
@@ -398,6 +434,13 @@ function App() {
                         <div className="book-info-content">
                           <div className="book-info-title">{book.title}</div>
                           {book.author && <div className="book-info-author">{book.author}</div>}
+                          {(book.cycle || book.number) && (
+                            <div className="book-info-cycle" style={{ marginTop: '6px', fontSize: '0.75rem', color: '#ffd700' }}>
+                              {book.cycle && <span>{book.cycle}</span>}
+                              {book.cycle && book.number && <span> • </span>}
+                              {book.number && <span>№{book.number}</span>}
+                            </div>
+                          )}
                           {book.description && (
                             <div className="book-info-description" style={{ marginTop: '8px', fontSize: '0.8rem', opacity: 0.9 }}>
                               {book.description}
