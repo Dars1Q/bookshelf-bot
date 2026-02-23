@@ -18,7 +18,8 @@
       "rating": "Оцінка",
       "status": "Статус",
       "cycle": "Цикл",
-      "number": "№ в циклі"
+      "number": "№ в циклі",
+      "completedDate": "Дата прочитання"
     },
     "placeholders": {
       "title": "Введіть назву",

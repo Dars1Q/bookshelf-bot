@@ -34,6 +34,7 @@ interface Book {
   number: string | null;
   status: BookStatus;
   created_at?: any;
+  completed_date?: string | null;
 }
 
 interface BookFormData {
@@ -45,6 +46,7 @@ interface BookFormData {
   cycle: string;
   number: string;
   status: BookStatus;
+  completed_date: string;
 }
 
 const initialFormData: BookFormData = {
@@ -56,6 +58,7 @@ const initialFormData: BookFormData = {
   cycle: '',
   number: '',
   status: 'reading',
+  completed_date: '',
 };
 
 const BOOKS_PER_SHELF = 4;
@@ -270,6 +273,7 @@ function App() {
           cycle: formData.cycle || null,
           number: formData.number || null,
           status: formData.status,
+          completed_date: formData.status === 'completed' ? (formData.completed_date || new Date().toISOString().split('T')[0]) : null,
         });
       } else {
         await addDoc(booksRef, {
@@ -281,6 +285,7 @@ function App() {
           cycle: formData.cycle || null,
           number: formData.number || null,
           status: formData.status,
+          completed_date: formData.status === 'completed' ? (formData.completed_date || new Date().toISOString().split('T')[0]) : null,
           created_at: Timestamp.now(),
         });
       }
@@ -306,6 +311,7 @@ function App() {
       cycle: book.cycle || '',
       number: book.number?.toString() || '',
       status: book.status,
+      completed_date: book.completed_date || '',
     });
     setShowForm(true);
   };
@@ -351,11 +357,22 @@ function App() {
     let total = 0;
 
     completedBooks.forEach(book => {
-      // @ts-ignore - created_at может быть undefined для старых книг
-      const createdAt = book.created_at?.toDate?.() || book.created_at;
-      if (createdAt && createdAt instanceof Date) {
-        const year = createdAt.getFullYear();
-        const month = createdAt.getMonth();
+      // Используем completed_date если есть, иначе created_at
+      let date: Date | null = null;
+      
+      if (book.completed_date) {
+        date = new Date(book.completed_date);
+      } else if (book.created_at) {
+        // @ts-ignore
+        const createdAt = book.created_at?.toDate?.() || book.created_at;
+        if (createdAt instanceof Date) {
+          date = createdAt;
+        }
+      }
+      
+      if (date) {
+        const year = date.getFullYear();
+        const month = date.getMonth();
         if (year === selectedYear) {
           monthCounts[month]++;
           total++;
@@ -385,9 +402,19 @@ function App() {
     // Доступные годы
     const availableYears = Array.from(new Set(
       completedBooks
-        .filter(b => b.created_at)
-        // @ts-ignore
-        .map(b => new Date(b.created_at?.toDate?.() || b.created_at).getFullYear())
+        .map(b => {
+          if (b.completed_date) {
+            return new Date(b.completed_date).getFullYear();
+          } else if (b.created_at) {
+            // @ts-ignore
+            const createdAt = b.created_at?.toDate?.() || b.created_at;
+            if (createdAt instanceof Date) {
+              return createdAt.getFullYear();
+            }
+          }
+          return null;
+        })
+        .filter((year): year is number => year !== null)
     )).sort((a, b) => b - a);
 
     return { monthCounts, maxCount, total, bestMonth, bestCount, availableYears };
@@ -555,6 +582,26 @@ function App() {
                   <option value="completed">{t.tabs.completed.icon} {t.tabs.completed.label}</option>
                 </select>
               </div>
+
+              {formData.status === 'completed' && (
+                <div className="form-group">
+                  <label>📅 {t.form.labels.completedDate || 'Дата прочтения'}</label>
+                  <input
+                    type="date"
+                    value={formData.completed_date}
+                    onChange={(e) => setFormData({ ...formData, completed_date: e.target.value })}
+                    style={{
+                      width: '100%',
+                      padding: '14px 18px',
+                      border: '2px solid rgba(255, 255, 255, 0.1)',
+                      background: '#ffffff0d',
+                      borderRadius: '12px',
+                      fontSize: '1rem',
+                      color: '#fff',
+                    }}
+                  />
+                </div>
+              )}
 
               <div className="form-group">
                 <label>{t.form.labels.rating}</label>

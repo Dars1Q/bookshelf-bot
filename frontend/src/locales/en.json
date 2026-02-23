@@ -18,7 +18,8 @@
       "rating": "Rating",
       "status": "Status",
       "cycle": "Series",
-      "number": "No. in Series"
+      "number": "No. in Series",
+      "completedDate": "Date Completed"
     },
     "placeholders": {
       "title": "Enter title",
