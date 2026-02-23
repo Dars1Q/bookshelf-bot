@@ -143,10 +143,17 @@ function App() {
       const q = query(booksRef, orderBy('created_at', 'desc'));
       const snapshot = await getDocs(q);
 
-      const booksData = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      })) as Book[];
+      const booksData = snapshot.docs.map(doc => {
+        const data = doc.data();
+        // Миграция: если нет статуса, ставим 'reading' по умолчанию
+        if (!data.status) {
+          data.status = 'reading';
+        }
+        return {
+          id: doc.id,
+          ...data
+        };
+      }) as Book[];
 
       console.log('Загружено книг:', booksData.length);
       setBooks(booksData);
