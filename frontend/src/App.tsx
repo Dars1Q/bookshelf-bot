@@ -61,6 +61,7 @@ function App() {
   const [formData, setFormData] = useState<BookFormData>(initialFormData);
   const [telegramId, setTelegramId] = useState<string>('');
   const [loading, setLoading] = useState(true);
+  const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
   const { t, lang, changeLanguage } = useTranslation();
 
   // Инициализация Telegram Web App
@@ -254,8 +255,16 @@ function App() {
         <h1><span>📚</span> <span className="title-text">{t.title}</span></h1>
         <p>{t.subtitle}</p>
 
-        {/* Переключатель языка - скрыт
-        <div className="language-switcher">
+        {/* Переключатель языка */}
+        <button
+          className="language-toggle"
+          onClick={() => setShowLanguageSwitcher(!showLanguageSwitcher)}
+          title="Выбрать язык"
+        >
+          🌐 {lang.toUpperCase()}
+        </button>
+
+        <div className={`language-switcher ${showLanguageSwitcher ? 'visible' : ''}`}>
           <button
             className={lang === 'ru' ? 'active' : ''}
             onClick={() => changeLanguage('ru')}
@@ -275,7 +284,6 @@ function App() {
             UK
           </button>
         </div>
-        */}
       </header>
 
       {showForm && (
