@@ -164,23 +164,6 @@ body {
   white-space: nowrap;
 }
 
-@media (max-width: 768px) {
-  .status-tabs {
-    gap: 8px;
-    margin: 15px auto 20px;
-  }
-
-  .status-tab {
-    padding: 10px 14px;
-    font-size: 0.85rem;
-    gap: 6px;
-  }
-
-  .status-tab-icon {
-    font-size: 1rem;
-  }
-}
-
 /* Loading */
 .loading {
   display: flex;
@@ -414,6 +397,7 @@ body {
   transition: all 0.3s;
   cursor: pointer;
   flex-shrink: 0;
+  margin-bottom: 20px;
 }
 
 .book-slot:hover {
@@ -443,7 +427,7 @@ body {
   transition: all 0.3s;
   background: #1a1a2e;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  margin-bottom: 80px;
+  margin-bottom: 20px;
 }
 
 .book-on-shelf:hover {
@@ -756,12 +740,28 @@ body {
 
   .shelf {
     padding: 0 10px;
-    min-height: 280px;
+    min-height: 220px;
   }
 
   .book-slot,
   .book-on-shelf {
-    width: 160px;
-    height: 220px;
+    width: 140px;
+    height: 200px;
+    margin-bottom: 15px;
+  }
+
+  .status-tabs {
+    gap: 6px;
+    margin: 10px auto 15px;
+  }
+
+  .status-tab {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    gap: 4px;
+  }
+
+  .status-tab-icon {
+    font-size: 0.9rem;
   }
 }
