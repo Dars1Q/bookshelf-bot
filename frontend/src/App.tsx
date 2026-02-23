@@ -136,7 +136,10 @@ function TrackerView({ trackerData, selectedYear, onYearChange, t }: TrackerView
                 <div key={idx} className="chart-bar-wrapper">
                   <div
                     className={`chart-bar ${count > 0 ? 'has-value' : ''}`}
-                    style={{ height: `${(count / maxCount) * 100}%` }}
+                    style={{
+                      '--bar-height': count,
+                      '--max-height': maxCount
+                    } as React.CSSProperties}
                   >
                     {count > 0 && <span className="chart-value">{count}</span>}
                   </div>
@@ -544,13 +547,24 @@ function App() {
               <div className="form-group">
                 <label>{formData.status === 'reading' ? (t.form.labels.comment || 'Комментарий') : (t.form.labels.genre || 'Жанр')}</label>
                 {formData.status === 'reading' ? (
-                  <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder="Заметки о книге..."
-                    rows={2}
-                    style={{ minHeight: '60px', resize: 'vertical' }}
-                  />
+                  <>
+                    <textarea
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      placeholder="Заметки о книге..."
+                      rows={2}
+                      style={{ minHeight: '60px', resize: 'vertical' }}
+                    />
+                    <div className="form-group" style={{ marginTop: '12px' }}>
+                      <label>{t.form.labels.genre || 'Жанр'}</label>
+                      <input
+                        type="text"
+                        value={formData.genre}
+                        onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
+                        placeholder={t.form.placeholders.genre || 'Например: Фантастика'}
+                      />
+                    </div>
+                  </>
                 ) : (
                   <input
                     type="text"

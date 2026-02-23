@@ -364,6 +364,7 @@ body {
   align-items: flex-end;
   justify-content: center;
   min-height: 4px;
+  height: calc((var(--bar-height) / var(--max-height)) * 220px);
 }
 
 .chart-bar.has-value {
@@ -381,7 +382,7 @@ body {
   font-size: 0.9rem;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
   position: absolute;
-  top: -22px;
+  top: 8px;
   left: 50%;
   transform: translateX(-50%);
   white-space: nowrap;
