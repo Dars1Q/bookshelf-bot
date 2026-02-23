@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import WebApp from '@twa-dev/sdk';
 import { initializeApp } from 'firebase/app';
 import {
@@ -68,7 +68,6 @@ interface TrackerViewProps {
     total: number;
     bestMonth: string;
     bestCount: number;
-    monthNames: string[];
     availableYears: number[];
   };
   selectedYear: number;
@@ -77,12 +76,18 @@ interface TrackerViewProps {
 }
 
 function TrackerView({ trackerData, selectedYear, onYearChange, t }: TrackerViewProps) {
-  const { monthCounts, maxCount, total, bestMonth, bestCount, monthNames, availableYears } = trackerData;
+  const { monthCounts, maxCount, total, bestMonth, bestCount, availableYears } = trackerData;
+
+  // Используем локализованные названия месяцев
+  const localizedMonths = t.tracker?.months || [
+    'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
+    'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+  ];
 
   return (
     <div className="tracker-content">
       <div className="tracker-header">
-        <h2>📊 {t.tabs.tracker?.label || 'Трекер прочитанного'}</h2>
+        <h2>📊 {t.tracker?.title || 'Трекер прочитанного'}</h2>
         {availableYears.length > 0 && (
           <select
             value={selectedYear}
@@ -99,19 +104,19 @@ function TrackerView({ trackerData, selectedYear, onYearChange, t }: TrackerView
       {total === 0 ? (
         <div className="tracker-empty">
           <div className="tracker-empty-icon">📚</div>
-          <p>В {selectedYear} году ещё не было прочитано книг</p>
+          <p>{(t.tracker?.stats?.noBooks || 'В {year} году ещё не было прочитано книг').replace('{year}', selectedYear.toString())}</p>
         </div>
       ) : (
         <>
           <div className="tracker-stats">
             <div className="stat-card">
               <span className="stat-value">{total}</span>
-              <span className="stat-label">книг за год</span>
+              <span className="stat-label">{t.tracker?.stats?.booksThisYear || 'книг за год'}</span>
             </div>
             {bestMonth && (
               <div className="stat-card">
                 <span className="stat-value">{bestMonth}</span>
-                <span className="stat-label">лучший месяц ({bestCount})</span>
+                <span className="stat-label">{t.tracker?.stats?.bestMonth || 'лучший месяц'} ({bestCount})</span>
               </div>
             )}
           </div>
@@ -126,7 +131,7 @@ function TrackerView({ trackerData, selectedYear, onYearChange, t }: TrackerView
                   >
                     {count > 0 && <span className="chart-value">{count}</span>}
                   </div>
-                  <span className="chart-label">{monthNames[idx]}</span>
+                  <span className="chart-label">{localizedMonths[idx]}</span>
                 </div>
               ))}
             </div>
@@ -337,7 +342,7 @@ function App() {
   }
 
   // Трекер: подсчёт книг по месяцам для выбранного года
-  const getTrackerData = () => {
+  const trackerData = useMemo(() => {
     const completedBooks = books.filter(book => book.status === 'completed');
     const monthCounts = Array(12).fill(0);
     let total = 0;
@@ -356,20 +361,23 @@ function App() {
     });
 
     const maxCount = Math.max(...monthCounts, 1);
-    const monthNames = [
-      'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
-      'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
-    ];
 
     // Найти лучший месяц
-    let bestMonth = '';
+    let bestMonthIndex = -1;
     let bestCount = 0;
     monthCounts.forEach((count, idx) => {
       if (count > bestCount) {
         bestCount = count;
-        bestMonth = monthNames[idx];
+        bestMonthIndex = idx;
       }
     });
+
+    // Получаем название лучшего месяца из локализации
+    const monthNames = t.tracker?.months || [
+      'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
+      'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+    ];
+    const bestMonth = bestMonthIndex >= 0 ? monthNames[bestMonthIndex] : '';
 
     // Доступные годы
     const availableYears = Array.from(new Set(
@@ -379,8 +387,8 @@ function App() {
         .map(b => new Date(b.created_at?.toDate?.() || b.created_at).getFullYear())
     )).sort((a, b) => b - a);
 
-    return { monthCounts, maxCount, total, bestMonth, bestCount, monthNames, availableYears };
-  };
+    return { monthCounts, maxCount, total, bestMonth, bestCount, availableYears };
+  }, [books, selectedYear, t.tracker?.months]);
 
   const tabLabels: Record<BookStatus, { label: string; icon: string }> = {
     reading: { label: t.tabs.reading.label, icon: t.tabs.reading.icon },
@@ -593,7 +601,7 @@ function App() {
       ) : activeTab === 'tracker' ? (
         <div className="tracker-container">
           <TrackerView
-            trackerData={getTrackerData()}
+            trackerData={trackerData}
             selectedYear={selectedYear}
             onYearChange={setSelectedYear}
             t={t}
