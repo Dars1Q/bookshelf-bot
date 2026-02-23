@@ -548,7 +548,8 @@ function App() {
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder="Заметки о книге..."
-                    rows={3}
+                    rows={2}
+                    style={{ minHeight: '60px', resize: 'vertical' }}
                   />
                 ) : (
                   <input
