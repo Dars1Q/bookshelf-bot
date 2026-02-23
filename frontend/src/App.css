@@ -164,6 +164,23 @@ body {
   white-space: nowrap;
 }
 
+@media (max-width: 768px) {
+  .status-tabs {
+    gap: 8px;
+    margin: 15px auto 20px;
+  }
+
+  .status-tab {
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    gap: 6px;
+  }
+
+  .status-tab-icon {
+    font-size: 1rem;
+  }
+}
+
 /* Loading */
 .loading {
   display: flex;
