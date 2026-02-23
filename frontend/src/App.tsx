@@ -547,24 +547,13 @@ function App() {
               <div className="form-group">
                 <label>{formData.status === 'reading' ? (t.form.labels.comment || 'Комментарий') : (t.form.labels.genre || 'Жанр')}</label>
                 {formData.status === 'reading' ? (
-                  <>
-                    <textarea
-                      value={formData.description}
-                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                      placeholder="Заметки о книге..."
-                      rows={2}
-                      style={{ minHeight: '60px', resize: 'vertical' }}
-                    />
-                    <div className="form-group" style={{ marginTop: '12px' }}>
-                      <label>{t.form.labels.genre || 'Жанр'}</label>
-                      <input
-                        type="text"
-                        value={formData.genre}
-                        onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                        placeholder={t.form.placeholders.genre || 'Например: Фантастика'}
-                      />
-                    </div>
-                  </>
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    placeholder={t.form.placeholders.comment || 'Заметки о книге...'}
+                    rows={2}
+                    style={{ minHeight: '60px', resize: 'vertical' }}
+                  />
                 ) : (
                   <input
                     type="text"
@@ -592,7 +581,7 @@ function App() {
                     type="text"
                     value={formData.number}
                     onChange={(e) => setFormData({ ...formData, number: e.target.value })}
-                    placeholder="1 или 3.5"
+                    placeholder={t.form.placeholders.number || '1 или 3.5'}
                     pattern="[0-9]*[.,]?[0-9]*"
                     inputMode="decimal"
                   />

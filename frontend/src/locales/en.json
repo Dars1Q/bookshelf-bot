@@ -29,7 +29,9 @@
       "cover": "https://example.com/cover.jpg",
       "description": "Brief description",
       "cycle": "e.g. The Witcher",
-      "genre": "e.g. Fantasy"
+      "genre": "e.g. Fantasy",
+      "number": "1 or 3.5",
+      "comment": "Notes about the book..."
     },
     "save": "Save",
     "add": "Add to Shelf",

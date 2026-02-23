@@ -359,7 +359,7 @@ body {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 16px;
   padding: 30px 20px 20px;
-  overflow: hidden;
+  overflow-x: auto;
   position: relative;
 }
 
@@ -387,7 +387,7 @@ body {
   display: flex;
   gap: 12px;
   justify-content: space-between;
-  min-width: 600px;
+  min-width: 700px;
   align-items: flex-end;
   height: 250px;
   padding-bottom: 10px;
@@ -400,14 +400,14 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  height: 220px;
+  height: 280px;
   justify-content: flex-end;
-  max-width: 35px;
+  max-width: 45px;
 }
 
 .chart-bar {
   width: 100%;
-  max-width: 28px;
+  max-width: 40px;
   background: linear-gradient(to top, rgba(0, 245, 255, 0.3) 0%, rgba(255, 0, 255, 0.3) 100%);
   border-radius: 8px 8px 0 0;
   transition: height 0.5s ease;
@@ -416,7 +416,7 @@ body {
   align-items: flex-end;
   justify-content: center;
   min-height: 4px;
-  height: min(calc((var(--bar-height) / var(--max-height)) * 170px), 170px);
+  height: min(calc((var(--bar-height) / var(--max-height)) * 220px), 220px);
 }
 
 .chart-bar.has-value {
@@ -1044,32 +1044,32 @@ body {
   }
 
   .chart-container {
-    padding: 20px 5px 15px;
-    overflow: hidden;
+    padding: 20px 10px 15px;
+    overflow-x: auto;
   }
 
   .chart-bars {
-    min-width: 380px;
-    height: 170px;
-    gap: 3px;
+    min-width: 500px;
+    height: 200px;
+    gap: 6px;
   }
 
   .chart-bar {
-    max-width: 28px;
-    height: min(calc((var(--bar-height) / var(--max-height)) * 140px), 140px);
+    max-width: 38px;
+    height: min(calc((var(--bar-height) / var(--max-height)) * 170px), 170px);
   }
 
   .chart-bar-wrapper {
-    height: 190px;
-    max-width: 35px;
+    height: 240px;
+    max-width: 45px;
   }
 
   .chart-label {
-    font-size: 0.55rem;
+    font-size: 0.6rem;
   }
 
   .chart-value {
-    font-size: 0.7rem;
-    top: 5px;
+    font-size: 0.75rem;
+    top: 6px;
   }
 }
