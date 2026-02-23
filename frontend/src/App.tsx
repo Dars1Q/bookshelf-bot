@@ -251,9 +251,9 @@ function App() {
   }
 
   const tabLabels: Record<BookStatus, { label: string; icon: string }> = {
-    reading: { label: 'Читаю', icon: '📖' },
-    want_to_read: { label: 'Хочу прочитать', icon: '📚' },
-    completed: { label: 'Прочитано', icon: '✅' },
+    reading: { label: t.tabs.reading.label, icon: t.tabs.reading.icon },
+    want_to_read: { label: t.tabs.want_to_read.label, icon: t.tabs.want_to_read.icon },
+    completed: { label: t.tabs.completed.label, icon: t.tabs.completed.icon },
   };
 
   if (loading) {
@@ -368,17 +368,17 @@ function App() {
 
               <div className="form-row">
                 <div className="form-group">
-                  <label>Цикл</label>
+                  <label>{t.form.labels.cycle}</label>
                   <input
                     type="text"
                     value={formData.cycle}
                     onChange={(e) => setFormData({ ...formData, cycle: e.target.value })}
-                    placeholder="Например: Ведьмак"
+                    placeholder={t.form.placeholders.cycle}
                   />
                 </div>
 
                 <div className="form-group">
-                  <label>№ в цикле</label>
+                  <label>{t.form.labels.number}</label>
                   <input
                     type="number"
                     value={formData.number}
@@ -390,7 +390,7 @@ function App() {
               </div>
 
               <div className="form-group">
-                <label>Статус</label>
+                <label>{t.form.labels.status}</label>
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({ ...formData, status: e.target.value as BookStatus })}
@@ -405,9 +405,9 @@ function App() {
                     cursor: 'pointer',
                   }}
                 >
-                  <option value="reading">📖 Читаю</option>
-                  <option value="want_to_read">📚 Хочу прочитать</option>
-                  <option value="completed">✅ Прочитано</option>
+                  <option value="reading">{t.tabs.reading.icon} {t.tabs.reading.label}</option>
+                  <option value="want_to_read">{t.tabs.want_to_read.icon} {t.tabs.want_to_read.label}</option>
+                  <option value="completed">{t.tabs.completed.icon} {t.tabs.completed.label}</option>
                 </select>
               </div>
 

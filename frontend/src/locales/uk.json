@@ -15,17 +15,35 @@
       "author": "Автор",
       "cover": "Обкладинка (URL)",
       "description": "Опис",
-      "rating": "Оцінка"
+      "rating": "Оцінка",
+      "status": "Статус",
+      "cycle": "Цикл",
+      "number": "№ в циклі"
     },
     "placeholders": {
       "title": "Введіть назву",
       "author": "Ім'я автора",
       "cover": "https://example.com/cover.jpg",
-      "description": "Короткий опис книги"
+      "description": "Короткий опис книги",
+      "cycle": "Наприклад: Відьмак"
     },
     "save": "Зберегти",
     "add": "Додати на полицю",
     "cancel": "Скасувати"
+  },
+  "tabs": {
+    "reading": {
+      "label": "Читаю",
+      "icon": "📖"
+    },
+    "want_to_read": {
+      "label": "Хочу прочитати",
+      "icon": "📚"
+    },
+    "completed": {
+      "label": "Прочитано",
+      "icon": "✅"
+    }
   },
   "loading": "Завантажуємо полицю...",
   "bookInfo": {

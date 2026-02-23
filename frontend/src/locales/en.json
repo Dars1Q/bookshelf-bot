@@ -15,17 +15,35 @@
       "author": "Author",
       "cover": "Cover (URL)",
       "description": "Description",
-      "rating": "Rating"
+      "rating": "Rating",
+      "status": "Status",
+      "cycle": "Series",
+      "number": "No. in Series"
     },
     "placeholders": {
       "title": "Enter title",
       "author": "Author name",
       "cover": "https://example.com/cover.jpg",
-      "description": "Brief description"
+      "description": "Brief description",
+      "cycle": "e.g. The Witcher"
     },
     "save": "Save",
     "add": "Add to Shelf",
     "cancel": "Cancel"
+  },
+  "tabs": {
+    "reading": {
+      "label": "Reading",
+      "icon": "📖"
+    },
+    "want_to_read": {
+      "label": "Want to Read",
+      "icon": "📚"
+    },
+    "completed": {
+      "label": "Completed",
+      "icon": "✅"
+    }
   },
   "loading": "Loading shelf...",
   "bookInfo": {

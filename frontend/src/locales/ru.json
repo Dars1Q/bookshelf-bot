@@ -15,17 +15,35 @@
       "author": "Автор",
       "cover": "Обложка (URL)",
       "description": "Описание",
-      "rating": "Оценка"
+      "rating": "Оценка",
+      "status": "Статус",
+      "cycle": "Цикл",
+      "number": "№ в цикле"
     },
     "placeholders": {
       "title": "Введите название",
       "author": "Имя автора",
       "cover": "https://example.com/cover.jpg",
-      "description": "Краткое описание книги"
+      "description": "Краткое описание книги",
+      "cycle": "Например: Ведьмак"
     },
     "save": "Сохранить",
     "add": "Добавить на полку",
     "cancel": "Отмена"
+  },
+  "tabs": {
+    "reading": {
+      "label": "Читаю",
+      "icon": "📖"
+    },
+    "want_to_read": {
+      "label": "Хочу прочитать",
+      "icon": "📚"
+    },
+    "completed": {
+      "label": "Прочитано",
+      "icon": "✅"
+    }
   },
   "loading": "Загружаем полку...",
   "bookInfo": {
