@@ -31,7 +31,7 @@ interface Book {
   cover_url: string | null;
   rating: number | null;
   cycle: string | null;
-  number: number | null;
+  number: string | null;
   status: BookStatus;
 }
 
@@ -181,7 +181,7 @@ function App() {
           cover_url: formData.cover_url || null,
           rating: formData.rating || null,
           cycle: formData.cycle || null,
-          number: formData.number ? parseInt(formData.number) : null,
+          number: formData.number || null,
           status: formData.status,
         });
       } else {
@@ -192,7 +192,7 @@ function App() {
           cover_url: formData.cover_url || null,
           rating: formData.rating || null,
           cycle: formData.cycle || null,
-          number: formData.number ? parseInt(formData.number) : null,
+          number: formData.number || null,
           status: formData.status,
           created_at: Timestamp.now(),
         });
@@ -387,11 +387,12 @@ function App() {
                 <div className="form-group">
                   <label>{t.form.labels.number}</label>
                   <input
-                    type="number"
+                    type="text"
                     value={formData.number}
                     onChange={(e) => setFormData({ ...formData, number: e.target.value })}
-                    placeholder="1"
-                    min="1"
+                    placeholder="1 или 3.5"
+                    pattern="[0-9]*[.,]?[0-9]*"
+                    inputMode="decimal"
                   />
                 </div>
               </div>
