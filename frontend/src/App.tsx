@@ -361,29 +361,38 @@ function App() {
     const monthCounts = Array(12).fill(0);
     let total = 0;
 
+    console.log('Tracker: всего прочитано книг:', completedBooks.length);
+    console.log('Tracker: выбранный год:', selectedYear);
+
     completedBooks.forEach(book => {
       // Используем completed_date если есть, иначе created_at
       let date: Date | null = null;
-      
+
       if (book.completed_date) {
         date = new Date(book.completed_date);
+        console.log(`Книга "${book.title}": completed_date = ${book.completed_date}`);
       } else if (book.created_at) {
         // @ts-ignore
         const createdAt = book.created_at?.toDate?.() || book.created_at;
         if (createdAt instanceof Date) {
           date = createdAt;
+          console.log(`Книга "${book.title}": created_at = ${createdAt}`);
         }
       }
-      
+
       if (date) {
         const year = date.getFullYear();
         const month = date.getMonth();
+        console.log(`  -> год: ${year}, месяц: ${month}`);
         if (year === selectedYear) {
           monthCounts[month]++;
           total++;
         }
       }
     });
+
+    console.log('Tracker: monthCounts:', monthCounts);
+    console.log('Tracker: total:', total);
 
     const maxCount = Math.max(...monthCounts, 1);
 
@@ -533,23 +542,22 @@ function App() {
               </div>
 
               <div className="form-group">
-                <label>{formData.status === 'reading' ? (t.form.labels.comment || 'Комментарий') : (t.form.labels.description || 'Описание')}</label>
-                <textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder={formData.status === 'reading' ? 'Заметки о книге...' : t.form.placeholders.description}
-                  rows={3}
-                />
-              </div>
-
-              <div className="form-group">
-                <label>{t.form.labels.genre || 'Жанр'}</label>
-                <input
-                  type="text"
-                  value={formData.genre}
-                  onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                  placeholder={t.form.placeholders.genre || 'Например: Фантастика'}
-                />
+                <label>{formData.status === 'reading' ? (t.form.labels.comment || 'Комментарий') : (t.form.labels.genre || 'Жанр')}</label>
+                {formData.status === 'reading' ? (
+                  <textarea
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    placeholder="Заметки о книге..."
+                    rows={3}
+                  />
+                ) : (
+                  <input
+                    type="text"
+                    value={formData.genre}
+                    onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
+                    placeholder={t.form.placeholders.genre || 'Например: Фантастика'}
+                  />
+                )}
               </div>
 
               <div className="form-row">
