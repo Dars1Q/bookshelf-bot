@@ -78,10 +78,13 @@ interface TrackerViewProps {
 function TrackerView({ trackerData, selectedYear, onYearChange, t }: TrackerViewProps) {
   const { monthCounts, maxCount, total, bestMonth, bestCount, availableYears } = trackerData;
 
-  // Используем локализованные названия месяцев
-  const localizedMonths = t.tracker?.months || [
-    'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
-    'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+  // Преобразуем локализованные названия месяцев в массив
+  const monthsObj = t.tracker?.months || {};
+  const localizedMonths = [
+    monthsObj.jan || 'Янв', monthsObj.feb || 'Фев', monthsObj.mar || 'Мар',
+    monthsObj.apr || 'Апр', monthsObj.may || 'Май', monthsObj.jun || 'Июн',
+    monthsObj.jul || 'Июл', monthsObj.aug || 'Авг', monthsObj.sep || 'Сен',
+    monthsObj.oct || 'Окт', monthsObj.nov || 'Ноя', monthsObj.dec || 'Дек'
   ];
 
   return (
