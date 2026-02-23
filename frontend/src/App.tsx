@@ -117,20 +117,20 @@ function TrackerView({ trackerData, selectedYear, onYearChange, t }: TrackerView
         </div>
       ) : (
         <>
-          <div className="chart-container">
-            <div className="tracker-stats">
-              <div className="stat-card">
-                <span className="stat-value">{total}</span>
-                <span className="stat-label">{t.tracker?.stats?.booksThisYear || 'книг за год'}</span>
-              </div>
-              {bestMonth && (
-                <div className="stat-card">
-                  <span className="stat-value">{bestMonth}</span>
-                  <span className="stat-label">{t.tracker?.stats?.bestMonth || 'лучший месяц'} ({bestCount})</span>
-                </div>
-              )}
+          <div className="tracker-stats-outside">
+            <div className="stat-card stat-card-small">
+              <span className="stat-value">{total}</span>
+              <span className="stat-label">{t.tracker?.stats?.booksThisYear || 'книг за год'}</span>
             </div>
+            {bestMonth && (
+              <div className="stat-card stat-card-small">
+                <span className="stat-value">{bestMonth}</span>
+                <span className="stat-label">{t.tracker?.stats?.bestMonth || 'лучший месяц'} ({bestCount})</span>
+              </div>
+            )}
+          </div>
 
+          <div className="chart-container">
             <div className="chart-bars">
               {monthCounts.map((count, idx) => (
                 <div key={idx} className="chart-bar-wrapper">

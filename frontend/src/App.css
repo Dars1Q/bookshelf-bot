@@ -326,10 +326,38 @@ body {
   font-size: 1.1rem;
 }
 
+.tracker-stats-outside {
+  display: flex;
+  gap: 12px;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+}
+
+.stat-card-small {
+  background: linear-gradient(135deg, rgba(0, 245, 255, 0.1) 0%, rgba(255, 0, 255, 0.1) 100%);
+  border: 2px solid rgba(0, 245, 255, 0.3);
+  border-radius: 10px;
+  padding: 10px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 100px;
+}
+
+.stat-card-small .stat-value {
+  font-size: 1.3rem;
+}
+
+.stat-card-small .stat-label {
+  font-size: 0.75rem;
+}
+
 .chart-container {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 16px;
-  padding: 60px 20px 20px;
+  padding: 30px 20px 20px;
   overflow-x: auto;
   position: relative;
 }
@@ -962,6 +990,25 @@ body {
     font-size: 1.2rem;
   }
 
+  .tracker-stats-outside {
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+
+  .stat-card-small {
+    min-width: 90px;
+    padding: 8px 14px;
+  }
+
+  .stat-card-small .stat-value {
+    font-size: 1.2rem;
+  }
+
+  .stat-card-small .stat-label {
+    font-size: 0.65rem;
+  }
+
   .tracker-stats {
     position: static;
     flex-wrap: wrap;
@@ -983,7 +1030,7 @@ body {
   }
 
   .chart-container {
-    padding: 50px 15px 15px;
+    padding: 20px 15px 15px;
   }
 
   .chart-bars {
