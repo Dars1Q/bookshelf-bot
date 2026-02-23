@@ -118,6 +118,52 @@ body {
   color: #a0a0a0;
 }
 
+/* Табы статусов */
+.status-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin: 20px auto 30px;
+  flex-wrap: wrap;
+}
+
+.status-tab {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.status-tab:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.status-tab.active {
+  background: linear-gradient(135deg, #00f5ff 0%, #ff00ff 100%);
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 0 25px rgba(0, 245, 255, 0.5);
+}
+
+.status-tab-icon {
+  font-size: 1.2rem;
+}
+
+.status-tab-label {
+  white-space: nowrap;
+}
+
 /* Loading */
 .loading {
   display: flex;

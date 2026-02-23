@@ -21,6 +21,8 @@ import './App.css';
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+type BookStatus = 'reading' | 'want_to_read' | 'completed';
+
 interface Book {
   id: string;
   title: string;
@@ -30,6 +32,7 @@ interface Book {
   rating: number | null;
   cycle: string | null;
   number: number | null;
+  status: BookStatus;
 }
 
 interface BookFormData {
@@ -40,6 +43,7 @@ interface BookFormData {
   rating: number | null;
   cycle: string;
   number: string;
+  status: BookStatus;
 }
 
 const initialFormData: BookFormData = {
@@ -50,6 +54,7 @@ const initialFormData: BookFormData = {
   rating: null,
   cycle: '',
   number: '',
+  status: 'reading',
 };
 
 const BOOKS_PER_SHELF = 4;
@@ -62,6 +67,7 @@ function App() {
   const [telegramId, setTelegramId] = useState<string>('');
   const [loading, setLoading] = useState(true);
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
+  const [activeTab, setActiveTab] = useState<BookStatus>('reading');
   const { t, lang, changeLanguage } = useTranslation();
 
   // Инициализация Telegram Web App
@@ -169,6 +175,7 @@ function App() {
           rating: formData.rating || null,
           cycle: formData.cycle || null,
           number: formData.number ? parseInt(formData.number) : null,
+          status: formData.status,
         });
       } else {
         await addDoc(booksRef, {
@@ -179,6 +186,7 @@ function App() {
           rating: formData.rating || null,
           cycle: formData.cycle || null,
           number: formData.number ? parseInt(formData.number) : null,
+          status: formData.status,
           created_at: Timestamp.now(),
         });
       }
@@ -203,6 +211,7 @@ function App() {
       rating: book.rating,
       cycle: book.cycle || '',
       number: book.number?.toString() || '',
+      status: book.status,
     });
     setShowForm(true);
   };
@@ -232,11 +241,20 @@ function App() {
     ));
   };
 
+  // Фильтрация книг по активному статусу
+  const filteredBooks = books.filter(book => book.status === activeTab);
+
   // Разбиваем книги на полки
   const shelves: Book[][] = [];
-  for (let i = 0; i < books.length; i += BOOKS_PER_SHELF) {
-    shelves.push(books.slice(i, i + BOOKS_PER_SHELF));
+  for (let i = 0; i < filteredBooks.length; i += BOOKS_PER_SHELF) {
+    shelves.push(filteredBooks.slice(i, i + BOOKS_PER_SHELF));
   }
+
+  const tabLabels: Record<BookStatus, { label: string; icon: string }> = {
+    reading: { label: 'Читаю', icon: '📖' },
+    want_to_read: { label: 'Хочу прочитать', icon: '📚' },
+    completed: { label: 'Прочитано', icon: '✅' },
+  };
 
   if (loading) {
     return (
@@ -285,6 +303,20 @@ function App() {
           </button>
         </div>
       </header>
+
+      {/* Переключатель статусов (табы) */}
+      <div className="status-tabs">
+        {(Object.keys(tabLabels) as BookStatus[]).map((status) => (
+          <button
+            key={status}
+            className={`status-tab ${activeTab === status ? 'active' : ''}`}
+            onClick={() => setActiveTab(status)}
+          >
+            <span className="status-tab-icon">{tabLabels[status].icon}</span>
+            <span className="status-tab-label">{tabLabels[status].label}</span>
+          </button>
+        ))}
+      </div>
 
       {showForm && (
         <div className="modal-overlay" onClick={() => setShowForm(false)}>
@@ -355,6 +387,28 @@ function App() {
                     min="1"
                   />
                 </div>
+              </div>
+
+              <div className="form-group">
+                <label>Статус</label>
+                <select
+                  value={formData.status}
+                  onChange={(e) => setFormData({ ...formData, status: e.target.value as BookStatus })}
+                  style={{
+                    width: '100%',
+                    padding: '14px 18px',
+                    border: '2px solid rgba(255, 255, 255, 0.1)',
+                    background: '#ffffff0d',
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    color: '#fff',
+                    cursor: 'pointer',
+                  }}
+                >
+                  <option value="reading">📖 Читаю</option>
+                  <option value="want_to_read">📚 Хочу прочитать</option>
+                  <option value="completed">✅ Прочитано</option>
+                </select>
               </div>
 
               <div className="form-group">
