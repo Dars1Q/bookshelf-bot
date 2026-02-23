@@ -484,10 +484,10 @@ function App() {
             EN
           </button>
           <button
-            className={lang === 'uk' ? 'active' : ''}
-            onClick={() => changeLanguage('uk')}
+            className={lang === 'ua' ? 'active' : ''}
+            onClick={() => changeLanguage('ua')}
           >
-            UK
+            UA
           </button>
         </div>
       </header>

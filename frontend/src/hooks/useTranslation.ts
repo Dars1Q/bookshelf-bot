@@ -3,12 +3,12 @@ import WebApp from '@twa-dev/sdk';
 
 import ru from '../locales/ru.json';
 import en from '../locales/en.json';
-import uk from '../locales/uk.json';
+import ua from '../locales/ua.json';
 
 const translations: Record<string, typeof ru> = {
   ru,
   en,
-  uk,
+  ua,
 };
 
 // Определение языка по коду Telegram

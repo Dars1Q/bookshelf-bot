@@ -93,7 +93,7 @@ LOCALES = {
         },
         'menu_button': '📚 My Shelf'
     },
-    'uk': {
+    'ua': {
         'start': {
             'text': (
                 "👋 Привіт! Я бот для ведення книжкової полиці.\n\n"

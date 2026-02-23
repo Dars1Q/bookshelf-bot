@@ -154,7 +154,7 @@ async def main():
 
         logging.info('Бот запущен...')
         logging.info(f'Web App URL: {WEB_APP_URL}')
-        logging.info('Localization: RU, EN, UK')
+        logging.info('Localization: RU, EN, UA')
         logging.info('Menu Button: 📚 Open Shelf (global)')
         await dp.start_polling(bot)
     except Exception as e:
