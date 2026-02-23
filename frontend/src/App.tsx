@@ -21,7 +21,7 @@ import './App.css';
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-type BookStatus = 'reading' | 'want_to_read' | 'completed';
+type BookStatus = 'reading' | 'want_to_read' | 'completed' | 'tracker';
 
 interface Book {
   id: string;
@@ -33,6 +33,7 @@ interface Book {
   cycle: string | null;
   number: string | null;
   status: BookStatus;
+  created_at?: any;
 }
 
 interface BookFormData {
@@ -59,6 +60,83 @@ const initialFormData: BookFormData = {
 
 const BOOKS_PER_SHELF = 4;
 
+// Компонент трекера прочитанных книг
+interface TrackerViewProps {
+  trackerData: {
+    monthCounts: number[];
+    maxCount: number;
+    total: number;
+    bestMonth: string;
+    bestCount: number;
+    monthNames: string[];
+    availableYears: number[];
+  };
+  selectedYear: number;
+  onYearChange: (year: number) => void;
+  t: any;
+}
+
+function TrackerView({ trackerData, selectedYear, onYearChange, t }: TrackerViewProps) {
+  const { monthCounts, maxCount, total, bestMonth, bestCount, monthNames, availableYears } = trackerData;
+
+  return (
+    <div className="tracker-content">
+      <div className="tracker-header">
+        <h2>📊 {t.tabs.tracker?.label || 'Трекер прочитанного'}</h2>
+        {availableYears.length > 0 && (
+          <select
+            value={selectedYear}
+            onChange={(e) => onYearChange(Number(e.target.value))}
+            className="year-selector"
+          >
+            {availableYears.map(year => (
+              <option key={year} value={year}>{year}</option>
+            ))}
+          </select>
+        )}
+      </div>
+
+      {total === 0 ? (
+        <div className="tracker-empty">
+          <div className="tracker-empty-icon">📚</div>
+          <p>В {selectedYear} году ещё не было прочитано книг</p>
+        </div>
+      ) : (
+        <>
+          <div className="tracker-stats">
+            <div className="stat-card">
+              <span className="stat-value">{total}</span>
+              <span className="stat-label">книг за год</span>
+            </div>
+            {bestMonth && (
+              <div className="stat-card">
+                <span className="stat-value">{bestMonth}</span>
+                <span className="stat-label">лучший месяц ({bestCount})</span>
+              </div>
+            )}
+          </div>
+
+          <div className="chart-container">
+            <div className="chart-bars">
+              {monthCounts.map((count, idx) => (
+                <div key={idx} className="chart-bar-wrapper">
+                  <div
+                    className={`chart-bar ${count > 0 ? 'has-value' : ''}`}
+                    style={{ height: `${(count / maxCount) * 100}%` }}
+                  >
+                    {count > 0 && <span className="chart-value">{count}</span>}
+                  </div>
+                  <span className="chart-label">{monthNames[idx]}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
 function App() {
   const [books, setBooks] = useState<Book[]>([]);
   const [showForm, setShowForm] = useState(false);
@@ -68,6 +146,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
   const [activeTab, setActiveTab] = useState<BookStatus>('reading');
+  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
   const { t, lang, changeLanguage } = useTranslation();
 
   // Инициализация Telegram Web App
@@ -257,10 +336,57 @@ function App() {
     shelves.push(filteredBooks.slice(i, i + BOOKS_PER_SHELF));
   }
 
+  // Трекер: подсчёт книг по месяцам для выбранного года
+  const getTrackerData = () => {
+    const completedBooks = books.filter(book => book.status === 'completed');
+    const monthCounts = Array(12).fill(0);
+    let total = 0;
+
+    completedBooks.forEach(book => {
+      // @ts-ignore - created_at может быть undefined для старых книг
+      const createdAt = book.created_at?.toDate?.() || book.created_at;
+      if (createdAt && createdAt instanceof Date) {
+        const year = createdAt.getFullYear();
+        const month = createdAt.getMonth();
+        if (year === selectedYear) {
+          monthCounts[month]++;
+          total++;
+        }
+      }
+    });
+
+    const maxCount = Math.max(...monthCounts, 1);
+    const monthNames = [
+      'Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн',
+      'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'
+    ];
+
+    // Найти лучший месяц
+    let bestMonth = '';
+    let bestCount = 0;
+    monthCounts.forEach((count, idx) => {
+      if (count > bestCount) {
+        bestCount = count;
+        bestMonth = monthNames[idx];
+      }
+    });
+
+    // Доступные годы
+    const availableYears = Array.from(new Set(
+      completedBooks
+        .filter(b => b.created_at)
+        // @ts-ignore
+        .map(b => new Date(b.created_at?.toDate?.() || b.created_at).getFullYear())
+    )).sort((a, b) => b - a);
+
+    return { monthCounts, maxCount, total, bestMonth, bestCount, monthNames, availableYears };
+  };
+
   const tabLabels: Record<BookStatus, { label: string; icon: string }> = {
     reading: { label: t.tabs.reading.label, icon: t.tabs.reading.icon },
     want_to_read: { label: t.tabs.want_to_read.label, icon: t.tabs.want_to_read.icon },
     completed: { label: t.tabs.completed.label, icon: t.tabs.completed.icon },
+    tracker: { label: t.tabs.tracker?.label || '📊 Трекер', icon: '📊' },
   };
 
   if (loading) {
@@ -464,16 +590,25 @@ function App() {
             {t.emptyState.button}
           </button>
         </div>
+      ) : activeTab === 'tracker' ? (
+        <div className="tracker-container">
+          <TrackerView
+            trackerData={getTrackerData()}
+            selectedYear={selectedYear}
+            onYearChange={setSelectedYear}
+            t={t}
+          />
+        </div>
       ) : (
         <div className="shelves-container">
           {shelves.map((shelfBooks, shelfIndex) => {
             const emptySlotsCount = BOOKS_PER_SHELF - shelfBooks.length;
-            
+
             return (
               <div key={shelfIndex} className="shelf-row">
                 <div className="shelf">
                   <div className="shelf-bracket left"></div>
-                  
+
                   {shelfBooks.map((book) => (
                     <div 
                       key={book.id} 

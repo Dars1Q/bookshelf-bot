@@ -224,6 +224,176 @@ body {
   letter-spacing: 1px;
 }
 
+/* Трекер прочитанных книг */
+.tracker-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.tracker-content {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tracker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.tracker-header h2 {
+  color: #00f5ff;
+  font-size: 1.5rem;
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.5);
+}
+
+.year-selector {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.year-selector:hover {
+  border-color: rgba(0, 245, 255, 0.5);
+  background: rgba(0, 245, 255, 0.1);
+}
+
+.year-selector:focus {
+  outline: none;
+  border-color: #00f5ff;
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+}
+
+.tracker-stats {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.stat-card {
+  background: linear-gradient(135deg, rgba(0, 245, 255, 0.1) 0%, rgba(255, 0, 255, 0.1) 100%);
+  border: 2px solid rgba(0, 245, 255, 0.3);
+  border-radius: 16px;
+  padding: 20px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  min-width: 150px;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #00f5ff;
+  text-shadow: 0 0 15px rgba(0, 245, 255, 0.5);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+.tracker-empty {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.tracker-empty-icon {
+  font-size: 5rem;
+  margin-bottom: 20px;
+  opacity: 0.5;
+}
+
+.tracker-empty p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.1rem;
+}
+
+.chart-container {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  padding: 30px 20px 20px;
+  overflow-x: auto;
+}
+
+.chart-bars {
+  display: flex;
+  gap: 12px;
+  justify-content: space-between;
+  min-width: 600px;
+  align-items: flex-end;
+  height: 250px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.chart-bar-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.chart-bar {
+  width: 100%;
+  max-width: 50px;
+  background: linear-gradient(to top, rgba(0, 245, 255, 0.3) 0%, rgba(255, 0, 255, 0.3) 100%);
+  border-radius: 8px 8px 0 0;
+  transition: all 0.3s;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 5px;
+  min-height: 4px;
+}
+
+.chart-bar.has-value {
+  background: linear-gradient(to top, rgba(0, 245, 255, 0.6) 0%, rgba(255, 0, 255, 0.6) 100%);
+  box-shadow: 0 0 20px rgba(0, 245, 255, 0.4);
+}
+
+.chart-bar:hover {
+  transform: scaleY(1.05);
+  box-shadow: 0 0 30px rgba(0, 245, 255, 0.6);
+}
+
+.chart-value {
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+  transform: translateY(-100%);
+  margin-bottom: 5px;
+  position: absolute;
+  top: -25px;
+}
+
+.chart-label {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
+  white-space: nowrap;
+}
+
 .form-group input,
 .form-group textarea {
   width: 100%;
@@ -763,5 +933,45 @@ body {
 
   .status-tab-icon {
     font-size: 0.9rem;
+  }
+
+  .tracker-content {
+    padding: 20px 15px;
+  }
+
+  .tracker-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tracker-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .tracker-stats {
+    gap: 12px;
+  }
+
+  .stat-card {
+    min-width: 120px;
+    padding: 15px 20px;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
+  }
+
+  .chart-bars {
+    min-width: 500px;
+    height: 200px;
+    gap: 8px;
+  }
+
+  .chart-bar {
+    max-width: 40px;
+  }
+
+  .chart-label {
+    font-size: 0.7rem;
   }
 }

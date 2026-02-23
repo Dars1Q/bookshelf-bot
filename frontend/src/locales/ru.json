@@ -43,6 +43,10 @@
     "completed": {
       "label": "Прочитано",
       "icon": "✅"
+    },
+    "tracker": {
+      "label": "Трекер",
+      "icon": "📊"
     }
   },
   "loading": "Загружаем полку...",

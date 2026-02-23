@@ -43,6 +43,10 @@
     "completed": {
       "label": "Completed",
       "icon": "✅"
+    },
+    "tracker": {
+      "label": "Tracker",
+      "icon": "📊"
     }
   },
   "loading": "Loading shelf...",
