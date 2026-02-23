@@ -547,13 +547,24 @@ function App() {
               <div className="form-group">
                 <label>{formData.status === 'reading' ? (t.form.labels.comment || 'Комментарий') : (t.form.labels.genre || 'Жанр')}</label>
                 {formData.status === 'reading' ? (
-                  <textarea
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder={t.form.placeholders.comment || 'Заметки о книге...'}
-                    rows={2}
-                    style={{ minHeight: '60px', resize: 'vertical' }}
-                  />
+                  <>
+                    <textarea
+                      value={formData.description}
+                      onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                      placeholder={t.form.placeholders.comment || 'Заметки о книге...'}
+                      rows={2}
+                      style={{ minHeight: '60px', resize: 'vertical' }}
+                    />
+                    <div className="form-group" style={{ marginTop: '12px' }}>
+                      <label>{t.form.labels.genre || 'Жанр'}</label>
+                      <input
+                        type="text"
+                        value={formData.genre}
+                        onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
+                        placeholder={t.form.placeholders.genre || 'Например: Фантастика'}
+                      />
+                    </div>
+                  </>
                 ) : (
                   <input
                     type="text"
