@@ -392,11 +392,12 @@ body {
   gap: 8px;
   height: 250px;
   justify-content: flex-end;
+  max-width: 35px;
 }
 
 .chart-bar {
   width: 100%;
-  max-width: 50px;
+  max-width: 28px;
   background: linear-gradient(to top, rgba(0, 245, 255, 0.3) 0%, rgba(255, 0, 255, 0.3) 100%);
   border-radius: 8px 8px 0 0;
   transition: height 0.5s ease;
@@ -405,7 +406,7 @@ body {
   align-items: flex-end;
   justify-content: center;
   min-height: 4px;
-  height: calc((var(--bar-height) / var(--max-height)) * 220px);
+  height: calc((var(--bar-height) / var(--max-height)) * 200px);
 }
 
 .chart-bar.has-value {
@@ -1033,25 +1034,30 @@ body {
   }
 
   .chart-container {
-    padding: 20px 10px 15px;
+    padding: 20px 5px 15px;
+    overflow-x: scroll;
   }
 
   .chart-bars {
-    min-width: 400px;
+    min-width: 380px;
     height: 180px;
-    gap: 4px;
+    gap: 3px;
   }
 
   .chart-bar {
-    max-width: 30px;
+    max-width: 28px;
+  }
+
+  .chart-bar-wrapper {
+    max-width: 35px;
   }
 
   .chart-label {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
   }
 
   .chart-value {
-    font-size: 0.75rem;
-    top: 6px;
+    font-size: 0.7rem;
+    top: 5px;
   }
 }
