@@ -359,8 +359,18 @@ body {
   background: rgba(0, 0, 0, 0.2);
   border-radius: 16px;
   padding: 30px 20px 20px;
-  overflow-x: auto;
+  overflow: hidden;
   position: relative;
+}
+
+.tracker-stats-below {
+  display: flex;
+  gap: 12px;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  margin-top: 15px;
+  padding-left: 10px;
+  overflow-x: auto;
 }
 
 .tracker-stats {
@@ -390,7 +400,7 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  height: 250px;
+  height: 220px;
   justify-content: flex-end;
   max-width: 35px;
 }
@@ -406,7 +416,7 @@ body {
   align-items: flex-end;
   justify-content: center;
   min-height: 4px;
-  height: calc((var(--bar-height) / var(--max-height)) * 200px);
+  height: min(calc((var(--bar-height) / var(--max-height)) * 170px), 170px);
 }
 
 .chart-bar.has-value {
@@ -1035,20 +1045,22 @@ body {
 
   .chart-container {
     padding: 20px 5px 15px;
-    overflow-x: scroll;
+    overflow: hidden;
   }
 
   .chart-bars {
     min-width: 380px;
-    height: 180px;
+    height: 170px;
     gap: 3px;
   }
 
   .chart-bar {
     max-width: 28px;
+    height: min(calc((var(--bar-height) / var(--max-height)) * 140px), 140px);
   }
 
   .chart-bar-wrapper {
+    height: 190px;
     max-width: 35px;
   }
 
