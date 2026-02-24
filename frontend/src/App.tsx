@@ -608,19 +608,21 @@ function App() {
         ))}
       </div>
 
-      {/* Кнопка добавления книги */}
-      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-        <button
-          className="btn-primary"
-          onClick={() => setShowForm(true)}
-          style={{
-            padding: '16px 32px',
-            fontSize: '1.1rem'
-          }}
-        >
-          {t.addButton}
-        </button>
-      </div>
+      {/* Кнопка добавления книги - не показывать в трекере */}
+      {activeTab !== 'tracker' && (
+        <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+          <button
+            className="btn-primary"
+            onClick={() => setShowForm(true)}
+            style={{
+              padding: '16px 32px',
+              fontSize: '1.1rem'
+            }}
+          >
+            {t.addButton}
+          </button>
+        </div>
+      )}
 
       {showForm && (
         <div className="modal-overlay" onClick={() => setShowForm(false)}>
