@@ -366,7 +366,7 @@ function App() {
     } catch (error) {
       console.error('Ошибка загрузки книг:', error);
       let errorMessage = 'Ошибка загрузки данных!';
-      
+
       if (error instanceof Error) {
         if (error.message.includes('PERMISSION_DENIED')) {
           errorMessage = 'Ошибка доступа! Проверь правила Firestore.';
@@ -374,10 +374,13 @@ function App() {
           errorMessage = 'Проблема с сетью! Проверь интернет.';
         } else if (error.message.includes('firebase')) {
           errorMessage = 'Ошибка Firebase: ' + error.message;
+        } else {
+          errorMessage = error.message;
         }
       }
-      
-      alert(errorMessage + ' Проверь консоль (F12)');
+
+      // Показываем ошибку в alert для iOS
+      alert('Ошибка:\n' + errorMessage + '\n\nTelegram ID: ' + telegramId);
       setBooks([]);
     } finally {
       setLoading(false);
