@@ -15,6 +15,7 @@ import {
 } from 'firebase/firestore';
 import { firebaseConfig } from './firebase';
 import { useTranslation } from './hooks/useTranslation';
+import { genres } from './genres';
 import './App.css';
 
 // Инициализация Firebase
@@ -35,7 +36,7 @@ interface Book {
   status: BookStatus;
   created_at?: any;
   completed_date?: string | null;
-  genre?: string | null;
+  genre: string[];
 }
 
 interface BookFormData {
@@ -48,7 +49,7 @@ interface BookFormData {
   number: string;
   status: BookStatus;
   completed_date: string;
-  genre: string;
+  genre: string[];
 }
 
 const initialFormData: BookFormData = {
@@ -61,10 +62,88 @@ const initialFormData: BookFormData = {
   number: '',
   status: 'reading',
   completed_date: '',
-  genre: '',
+  genre: [],
 };
 
 const BOOKS_PER_SHELF = 4;
+
+// Компонент выбора жанров
+interface GenreSelectorProps {
+  selectedGenres: string[];
+  onChange: (genres: string[]) => void;
+  lang: string;
+  isOpen: boolean;
+  onToggle: () => void;
+}
+
+function GenreSelector({ selectedGenres, onChange, lang, isOpen, onToggle }: GenreSelectorProps) {
+  const genreList = genres[lang as keyof typeof genres] || genres.en;
+  
+  const toggleGenre = (genre: string) => {
+    if (selectedGenres.includes(genre)) {
+      onChange(selectedGenres.filter(g => g !== genre));
+    } else {
+      onChange([...selectedGenres, genre]);
+    }
+  };
+
+  const removeGenre = (genre: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    onChange(selectedGenres.filter(g => g !== genre));
+  };
+
+  const getDisplayText = () => {
+    if (selectedGenres.length === 0) {
+      return lang === 'ua' ? 'Оберіть жанри' : lang === 'en' ? 'Select genres' : 'Выберите жанры';
+    }
+    return selectedGenres.join(', ');
+  };
+
+  return (
+    <div className="genre-selector">
+      <div className="genre-dropdown" onClick={onToggle}>
+        <span>{getDisplayText()}</span>
+        <span className={`genre-dropdown-arrow ${isOpen ? 'open' : ''}`}>▼</span>
+      </div>
+      
+      {isOpen && (
+        <div className="genre-options">
+          {genreList.map((genre) => (
+            <div
+              key={genre}
+              className="genre-option"
+              onClick={() => toggleGenre(genre)}
+            >
+              <input
+                type="checkbox"
+                id={`genre-${genre}`}
+                checked={selectedGenres.includes(genre)}
+                onChange={() => toggleGenre(genre)}
+              />
+              <label htmlFor={`genre-${genre}`}>{genre}</label>
+            </div>
+          ))}
+        </div>
+      )}
+      
+      {selectedGenres.length > 0 && (
+        <div className="genre-selected">
+          {selectedGenres.map((genre) => (
+            <span key={genre} className="genre-tag">
+              {genre}
+              <span
+                className="genre-tag-remove"
+                onClick={(e) => removeGenre(genre, e)}
+              >
+                ×
+              </span>
+            </span>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 // Компонент трекера прочитанных книг
 interface TrackerViewProps {
@@ -164,7 +243,26 @@ function App() {
   const [showLanguageSwitcher, setShowLanguageSwitcher] = useState(false);
   const [activeTab, setActiveTab] = useState<BookStatus>('reading');
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
+  const [showGenreDropdown, setShowGenreDropdown] = useState(false);
   const { t, lang, changeLanguage } = useTranslation();
+
+  // Закрытие дропдауна жанров при клике вне
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('.genre-selector')) {
+        setShowGenreDropdown(false);
+      }
+    };
+    
+    if (showGenreDropdown) {
+      document.addEventListener('click', handleClickOutside);
+    }
+    
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [showGenreDropdown]);
 
   // Инициализация Telegram Web App
   useEffect(() => {
@@ -280,6 +378,7 @@ function App() {
           number: formData.number || null,
           status: formData.status,
           completed_date: formData.status === 'completed' ? (formData.completed_date || new Date().toISOString().split('T')[0]) : null,
+          genre: formData.genre.length > 0 ? formData.genre : null,
         });
       } else {
         await addDoc(booksRef, {
@@ -292,7 +391,7 @@ function App() {
           number: formData.number || null,
           status: formData.status,
           completed_date: formData.status === 'completed' ? (formData.completed_date || new Date().toISOString().split('T')[0]) : null,
-          genre: formData.genre || null,
+          genre: formData.genre.length > 0 ? formData.genre : null,
           created_at: Timestamp.now(),
         });
       }
@@ -319,7 +418,7 @@ function App() {
       number: book.number?.toString() || '',
       status: book.status,
       completed_date: book.completed_date || '',
-      genre: book.genre || '',
+      genre: book.genre || [],
     });
     setShowForm(true);
   };
@@ -557,20 +656,22 @@ function App() {
                     />
                     <div className="form-group" style={{ marginTop: '12px' }}>
                       <label>{t.form.labels.genre || 'Жанр'}</label>
-                      <input
-                        type="text"
-                        value={formData.genre}
-                        onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                        placeholder={t.form.placeholders.genre || 'Например: Фантастика'}
+                      <GenreSelector
+                        selectedGenres={formData.genre}
+                        onChange={(genres) => setFormData({ ...formData, genre: genres })}
+                        lang={lang}
+                        isOpen={showGenreDropdown}
+                        onToggle={() => setShowGenreDropdown(!showGenreDropdown)}
                       />
                     </div>
                   </>
                 ) : (
-                  <input
-                    type="text"
-                    value={formData.genre}
-                    onChange={(e) => setFormData({ ...formData, genre: e.target.value })}
-                    placeholder={t.form.placeholders.genre || 'Например: Фантастика'}
+                  <GenreSelector
+                    selectedGenres={formData.genre}
+                    onChange={(genres) => setFormData({ ...formData, genre: genres })}
+                    lang={lang}
+                    isOpen={showGenreDropdown}
+                    onToggle={() => setShowGenreDropdown(!showGenreDropdown)}
                   />
                 )}
               </div>
