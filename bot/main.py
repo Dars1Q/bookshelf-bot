@@ -1,5 +1,7 @@
 import asyncio
 import logging
+import time
+from functools import wraps
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from aiogram.types import WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, MenuButtonWebApp
@@ -15,7 +17,30 @@ WEB_APP_URL = os.getenv('WEB_APP_URL', 'https://bookshelf-a70fd.web.app')
 WEB_APP_VERSION = 'v27'  # Меняем при обновлении для сброса кэша Telegram
 
 # Настройка логирования
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('bot.log', encoding='utf-8', mode='a'),
+        logging.StreamHandler()
+    ]
+)
+
+# Middleware для обработки ошибок
+def errors_handler(func):
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        try:
+            return await func(*args, **kwargs)
+        except Exception as e:
+            logging.error(f'Ошибка в {func.__name__}: {e}', exc_info=True)
+            try:
+                message = args[0] if args else kwargs.get('message')
+                if message:
+                    await message.answer('⚠️ Произошла ошибка. Попробуйте ещё раз.')
+            except:
+                pass
+    return wrapper
 
 # Инициализация бота
 bot = Bot(token=BOT_TOKEN)
@@ -23,14 +48,15 @@ dp = Dispatcher()
 
 # Обработчик /start
 @dp.message(Command('start'))
+@errors_handler
 async def cmd_start(message: types.Message):
     # Определяем язык из Telegram
     lang_code = message.from_user.language_code if message.from_user else 'ru'
     loc = get_locale(lang_code)
-    
+
     # Передаем Telegram ID в URL для главной кнопки
     web_app_url = f"{WEB_APP_URL}?tg_id={message.from_user.id}&v={WEB_APP_VERSION}"
-    
+
     main_keyboard = ReplyKeyboardMarkup(
         keyboard=[
             [KeyboardButton(text=loc['start']['buttons']['shelf'], web_app=WebAppInfo(url=web_app_url))],
@@ -38,7 +64,7 @@ async def cmd_start(message: types.Message):
         ],
         resize_keyboard=True
     )
-    
+
     await message.answer(
         loc['start']['text'],
         reply_markup=main_keyboard
@@ -46,11 +72,12 @@ async def cmd_start(message: types.Message):
 
 # Обработчик кнопки "Открыть полку"
 @dp.message(lambda msg: msg.text and msg.text in ['📚 Открыть полку', '📚 Open Shelf', '📚 Відкрити полицю'])
+@errors_handler
 async def open_webapp(message: types.Message):
     lang_code = message.from_user.language_code if message.from_user else 'ru'
     loc = get_locale(lang_code)
     web_app_url = f"{WEB_APP_URL}?tg_id={message.from_user.id}&v={WEB_APP_VERSION}"
-    
+
     await message.answer(
         loc['shelf']['text'],
         reply_markup=InlineKeyboardMarkup(
@@ -62,6 +89,7 @@ async def open_webapp(message: types.Message):
 
 # Обработчик кнопки "Добавить книгу"
 @dp.message(lambda msg: msg.text and msg.text in ['➕ Добавить книгу', '➕ Add Book', '➕ Додати книгу'])
+@errors_handler
 async def add_book_start(message: types.Message):
     lang_code = message.from_user.language_code if message.from_user else 'ru'
     loc = get_locale(lang_code)
@@ -71,6 +99,7 @@ async def add_book_start(message: types.Message):
 
 # Обработчик кнопки "Помощь"
 @dp.message(lambda msg: msg.text and msg.text in ['ℹ️ Помощь', 'ℹ️ Help', 'ℹ️ Допомога'])
+@errors_handler
 async def help_command(message: types.Message):
     lang_code = message.from_user.language_code if message.from_user else 'ru'
     loc = get_locale(lang_code)
@@ -79,6 +108,7 @@ async def help_command(message: types.Message):
 
 # Обработчик состояния добавления книги
 @dp.message(lambda msg: msg.text and msg.text.startswith('/'))
+@errors_handler
 async def skip_command(message: types.Message):
     if message.text == '/skip':
         lang_code = message.from_user.language_code if message.from_user else 'ru'
@@ -117,6 +147,7 @@ async def show_rating_keyboard(message: types.Message, loc: dict):
 
 # Обработчик оценок
 @dp.callback_query(lambda c: c.data.startswith('rate_'))
+@errors_handler
 async def process_rating(callback_query: types.CallbackQuery):
     lang_code = callback_query.from_user.language_code if callback_query.from_user else 'ru'
     loc = get_locale(lang_code)
@@ -158,7 +189,16 @@ async def main():
         logging.info('Menu Button: 📚 Open Shelf (global)')
         await dp.start_polling(bot)
     except Exception as e:
-        logging.error(f'Ошибка запуска бота: {e}')
+        logging.error(f'Критическая ошибка бота: {e}', exc_info=True)
+        logging.info('Попытка перезапуска через 5 секунд...')
+        await asyncio.sleep(5)
+        await main()  # Рекурсивный перезапуск
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    try:
+        logging.info('=== Запуск бота ===')
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        logging.info('Бот остановлен пользователем')
+    except Exception as e:
+        logging.error(f'Фатальная ошибка: {e}', exc_info=True)
