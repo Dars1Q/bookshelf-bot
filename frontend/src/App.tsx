@@ -355,6 +355,12 @@ function App() {
         if (!data.status) {
           data.status = 'reading';
         }
+        // Миграция: конвертируем genre из строки в массив
+        if (typeof data.genre === 'string') {
+          data.genre = [data.genre];
+        } else if (!data.genre) {
+          data.genre = [];
+        }
         return {
           id: doc.id,
           ...data
