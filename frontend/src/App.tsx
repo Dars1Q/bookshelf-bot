@@ -356,7 +356,19 @@ function App() {
       setBooks(booksData);
     } catch (error) {
       console.error('Ошибка загрузки книг:', error);
-      alert('Ошибка загрузки данных! Проверь консоль (F12)');
+      let errorMessage = 'Ошибка загрузки данных!';
+      
+      if (error instanceof Error) {
+        if (error.message.includes('PERMISSION_DENIED')) {
+          errorMessage = 'Ошибка доступа! Проверь правила Firestore.';
+        } else if (error.message.includes('NETWORK')) {
+          errorMessage = 'Проблема с сетью! Проверь интернет.';
+        } else if (error.message.includes('firebase')) {
+          errorMessage = 'Ошибка Firebase: ' + error.message;
+        }
+      }
+      
+      alert(errorMessage + ' Проверь консоль (F12)');
       setBooks([]);
     } finally {
       setLoading(false);
