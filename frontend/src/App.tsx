@@ -269,15 +269,22 @@ function App() {
 
   // Инициализация Telegram Web App
   useEffect(() => {
+    console.log('=== Web App Init ===');
+    console.log('Telegram WebApp:', !!WebApp);
+    console.log('InitData:', WebApp.initDataUnsafe?.user);
+    
     WebApp.ready();
     WebApp.expand();
+    console.log('WebApp expanded');
 
     // Получаем Telegram ID из URL параметра (передается ботом)
     const urlParams = new URLSearchParams(window.location.search);
     const urlTgId = urlParams.get('tg_id');
+    console.log('URL tg_id:', urlTgId);
 
     const user = WebApp.initDataUnsafe?.user;
-    
+    console.log('WebApp user:', user);
+
     // Приоритет: 1) URL параметр от бота, 2) Telegram Web App data, 3) localStorage
     if (urlTgId) {
       // Бот передал ID в URL - используем его
@@ -291,7 +298,7 @@ function App() {
       setTelegramId(tgId);
       localStorage.setItem('telegram_id', tgId);
       console.log('Telegram ID из WebApp:', tgId);
-      
+
       const username = [user.first_name, user.last_name].filter(Boolean).join(' ') || user.username;
       if (username) {
         localStorage.setItem('telegram_username', username);
@@ -310,6 +317,8 @@ function App() {
         console.log('Временный ID:', id);
       }
     }
+    
+    console.log('=== Web App Init Complete ===');
   }, []);
 
   // Загрузка книг
