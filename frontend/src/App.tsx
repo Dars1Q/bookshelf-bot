@@ -96,7 +96,10 @@ function GenreSelector({ selectedGenres, onChange, lang, isOpen, onToggle }: Gen
     if (selectedGenres.length === 0) {
       return lang === 'ua' ? 'Оберіть жанри' : lang === 'en' ? 'Select genres' : 'Выберите жанры';
     }
-    return selectedGenres.join(', ');
+    if (selectedGenres.length <= 2) {
+      return selectedGenres.join(', ');
+    }
+    return `${selectedGenres.slice(0, 2).join(', ')} +${selectedGenres.length - 2}`;
   };
 
   return (
@@ -605,6 +608,20 @@ function App() {
         ))}
       </div>
 
+      {/* Кнопка добавления книги */}
+      <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+        <button
+          className="btn-primary"
+          onClick={() => setShowForm(true)}
+          style={{
+            padding: '16px 32px',
+            fontSize: '1.1rem'
+          }}
+        >
+          {t.addButton}
+        </button>
+      </div>
+
       {showForm && (
         <div className="modal-overlay" onClick={() => setShowForm(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -775,17 +792,6 @@ function App() {
           <div className="empty-state-icon">📖</div>
           <h3>{t.emptyState.title}</h3>
           <p>{t.emptyState.description}</p>
-          <button
-            className="btn-primary"
-            onClick={() => setShowForm(true)}
-            style={{
-              marginTop: '20px',
-              padding: '16px 32px',
-              fontSize: '1.1rem'
-            }}
-          >
-            {t.emptyState.button}
-          </button>
         </div>
       ) : activeTab === 'tracker' ? (
         <div className="tracker-container">
@@ -889,21 +895,6 @@ function App() {
               </div>
             );
           })}
-
-          {/* Большая кнопка добавления книги */}
-          <div style={{ textAlign: 'center', marginTop: '40px' }}>
-            <button
-              className="btn-primary"
-              onClick={() => setShowForm(true)}
-              style={{
-                padding: '20px 40px',
-                fontSize: '1.2rem',
-                margin: '0 auto'
-              }}
-            >
-              {t.addButton}
-            </button>
-          </div>
         </div>
       )}
     </div>
