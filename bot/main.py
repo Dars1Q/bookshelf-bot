@@ -14,7 +14,7 @@ load_dotenv()
 
 BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 WEB_APP_URL = os.getenv('WEB_APP_URL', 'https://bookshelf-a70fd.web.app')
-WEB_APP_VERSION = 'v28-fix'  # Меняем при обновлении для сброса кэша Telegram
+WEB_APP_VERSION = 'v29-debug'  # Меняем при обновлении для сброса кэша Telegram
 
 # Настройка логирования
 logging.basicConfig(
