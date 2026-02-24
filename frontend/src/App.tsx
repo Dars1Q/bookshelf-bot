@@ -849,6 +849,12 @@ function App() {
                               {book.number && <span>№{book.number}</span>}
                             </div>
                           )}
+                          {book.genre && book.genre.length > 0 && (
+                            <div className="book-info-genre" style={{ marginTop: '6px', fontSize: '0.75rem', color: '#00f5ff' }}>
+                              {book.genre.slice(0, 3).join(', ')}
+                              {book.genre.length > 3 && <span>...</span>}
+                            </div>
+                          )}
                           {book.description && (
                             <div className="book-info-description" style={{ marginTop: '8px', fontSize: '0.8rem', opacity: 0.9 }}>
                               {book.description}
