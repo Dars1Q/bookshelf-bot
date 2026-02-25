@@ -17,7 +17,9 @@ export const genres = {
     'Детская литература',
     'Фанфик',
     'Детектив',
-    'Исторический роман'
+    'Исторический роман',
+    'Нон-фикшн',
+    'Психология'
   ],
   en: [
     'Fantasy',
@@ -37,7 +39,9 @@ export const genres = {
     'Children Literature',
     'Fanfiction',
     'Detective',
-    'Historical Romance'
+    'Historical Romance',
+    'Non-fiction',
+    'Psychology'
   ],
   ua: [
     'Фентезі',
@@ -57,6 +61,8 @@ export const genres = {
     'Дитяча література',
     'Фанфік',
     'Детектив',
-    'Історичний роман'
+    'Історичний роман',
+    'Нон-фікшн',
+    'Психологія'
   ]
 };
