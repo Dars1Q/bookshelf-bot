@@ -41,4 +41,4 @@ frontend/tsconfig.tsbuildinfo
 frontend/index-cdn.html
 
 # Firebase
-.firebaserc
+# .firebaserc - закоммичен для привязки проекта

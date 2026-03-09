@@ -8,9 +8,20 @@ from aiogram.types import WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton
 from dotenv import load_dotenv
 import os
 from locales import get_locale
+import firebase_admin
+from firebase_admin import credentials, firestore
 
 # Загрузка переменных окружения
 load_dotenv()
+
+# Инициализация Firebase Admin SDK
+try:
+    firebase_admin.initialize_app()
+    db = firestore.client()
+    logging.info('Firebase Admin SDK инициализирован')
+except Exception as e:
+    logging.warning(f'Firebase не инициализирован: {e}')
+    db = None
 
 BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
 WEB_APP_URL = os.getenv('WEB_APP_URL', 'https://bookshelf-a70fd.web.app')

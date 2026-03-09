@@ -12,20 +12,28 @@ Telegram бот с Web App для управления коллекцией кн
 
 ## 🚀 Deploy
 
-### 1. Railway (Бот)
+### 1. GitHub Actions (Бот) — бесплатно и автономно
 
+Бот работает через GitHub Actions и не требует Railway или других хостингов.
+
+**Настройка:**
+
+1. Открой репозиторий на GitHub → Settings → Secrets and variables → Actions
+
+2. Добавь два секрета:
+   - `TELEGRAM_BOT_TOKEN` — токен бота от @BotFather
+   - `WEB_APP_URL` — URL веб-приложения (например, `https://bookshelf-a70fd.web.app`)
+
+3. Запуш изменения в main/master ветку:
 ```bash
-git init
 git add .
-git commit -m "Initial commit"
+git commit -m "Setup GitHub Actions bot"
 git push -u origin main
 ```
 
-Затем в Railway:
-- New Project → Deploy from GitHub
-- Добавь переменные:
-  - `TELEGRAM_BOT_TOKEN`
-  - `WEB_APP_URL=https://bookshelf-a70fd.web.app`
+4. Workflow автоматически запустится. Проверь: Actions → Telegram Bot
+
+> **Примечание:** Для публичных репозиториев GitHub Actions бесплатен без ограничений.
 
 ### 2. Firebase (Frontend)
 
@@ -39,14 +47,18 @@ firebase deploy
 
 ```
 BookShelf/
-├── bot/               # Telegram бот (aiogram3)
+├── bot/                   # Telegram бот (aiogram3)
 │   ├── main.py
+│   ├── locales.py
 │   └── requirements.txt
-├── frontend/          # React Web App
+├── frontend/              # React Web App
 │   ├── src/
 │   └── dist/
-├── Procfile           # Для Railway
-└── requirements.txt   # Python зависимости
+├── .github/workflows/     # GitHub Actions для бота
+│   └── bot.yml
+├── .firebaserc            # Firebase проект
+├── firebase.json          # Firebase конфиг
+└── requirements.txt       # Python зависимости
 ```
 
 ## 🔧 Локальный запуск
@@ -76,5 +88,5 @@ npm run dev
 
 - **Frontend:** React 18, TypeScript, Vite, Firebase SDK
 - **Backend:** Firebase Firestore
-- **Бот:** Python 3.9+, aiogram 3
-- **Хостинг:** Firebase Hosting + Railway
+- **Бот:** Python 3.9+, aiogram 3, Firebase Admin SDK
+- **Хостинг:** Firebase Hosting + GitHub Actions
