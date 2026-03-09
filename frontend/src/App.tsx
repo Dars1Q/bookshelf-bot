@@ -481,8 +481,23 @@ function App() {
     ));
   };
 
-  // Фильтрация книг по активному статусу
-  const filteredBooks = books.filter(book => book.status === activeTab);
+  // Фильтрация и сортировка книг по активному статусу
+  const filteredBooks = useMemo(() => {
+    let result = books.filter(book => book.status === activeTab);
+    
+    // Для прочитанных книг сортируем по дате прочтения (от свежих к старым)
+    if (activeTab === 'completed') {
+      result.sort((a, b) => {
+        const dateA = a.completed_date ? new Date(a.completed_date).getTime() : 
+                      a.created_at?.toDate?.()?.getTime?.() || a.created_at || 0;
+        const dateB = b.completed_date ? new Date(b.completed_date).getTime() : 
+                      b.created_at?.toDate?.()?.getTime?.() || b.created_at || 0;
+        return dateB - dateA; // От свежих к старым
+      });
+    }
+    
+    return result;
+  }, [books, activeTab]);
 
   // Разбиваем книги на полки
   const shelves: Book[][] = [];
